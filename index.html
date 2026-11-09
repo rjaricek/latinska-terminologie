@@ -4,15 +4,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lékařská Latina - PhysioMetrics</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React a ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel pro překlad JSX v prohlížeči -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 flex items-center justify-center h-screen">
-    <div class="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full text-center border border-slate-200">
-        <h1 class="text-3xl font-extrabold text-teal-800 mb-4">Lékařská Latina</h1>
-        <p class="text-slate-600 mb-6">Aplikace PhysioMetrics úspěšně běží online na 24/7 hostingu! 🎉</p>
-        <div class="p-4 bg-teal-50 rounded-xl text-teal-900 font-medium">
-            Tady to žije 24 hodin denně.
-        </div>
-    </div>
+<body class="bg-slate-50 text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- IKONY (Lucide ekvivalenty v SVG) ---
+        const BookOpen = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
+        const LayoutDashboard = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>;
+        const CheckCircle2 = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>;
+        const XCircle = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>;
+        const BrainCircuit = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 5V3m0 18v-2M5 12H3m18 0h-2M8 8l-1.5-1.5M17.5 17.5L16 16M16 8l1.5-1.5M6.5 17.5L8 16"/><circle cx="12" cy="12" r="3"/><path d="M12 9a3 3 0 0 0-3 3"/></svg>;
+        const RotateCcw = ({className="w-4 h-4"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>;
+        const ChevronRight = ({className="w-4 h-4"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>;
+        const Trophy = ({className="w-12 h-12"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
+        const Dumbbell = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>;
+        const Stethoscope = ({className="w-8 h-8"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 0 0 5 2h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H7.5A3.5 3.5 0 0 0 4 10.5v1A7.5 7.5 0 0 0 11.5 19h1A7.5 7.5 0 0 0 20 11.5v-1A3.5 3.5 0 0 0 16.5 7H14a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a.3.3 0 0 1 .2.3l-1.2 6.1A5.5 5.5 0 0 1 11.5 17h-1A5.5 5.5 0 0 1 6 11.5v-1c0-.8.3-1.6.8-2.2L5.6 2.5a.3.3 0 0 1-.8-.2z"/></svg>;
+        const CheckSquare = ({className="w-12 h-12"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>;
+        const ListFilter = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
+        const Info = ({className="w-5 h-5"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>;
+        const Sparkles = ({className="w-4 h-4"}) => <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>;
+
+        // --- MASSIVE VOCABULARY DATABASE ---
+        const vocabDatabase = [
+            { cat: 'Lekce II: 1. Deklinace', latin: 'angina, ae, f.', czech: 'angina' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'anomalia, ae, f.', czech: 'zvláštnost, odlišnost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'aorta, ae, f.', czech: 'srdečnice, aorta' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'aqua, ae, f.', czech: 'voda' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'areola, ae, f.', czech: 'dvorec' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'arteria, ae, f.', czech: 'tepna, artérie' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'clavicula, ae, f.', czech: 'klíční kost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'columna, ae, f.', czech: 'sloup' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'columna vertebrarum', czech: 'páteř' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'costa, ae, f.', czech: 'žebro' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'coxa, ae, f.', czech: 'kyčel' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'diabetes, ae, m.', czech: 'průchod, průtok, cukrovka' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'diastole, es, f.', czech: 'diastola, ochabnutí srdeční svaloviny' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'dyspnoe, es, f.', czech: 'dušnost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'diphtheria, ae, f.', czech: 'záškrt' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'fibula, ae, f.', czech: 'lýtková kost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'fractura, ae, f.', czech: 'zlomenina' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'gangraena, ae, f.', czech: 'gangréna, sněť' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'glandula, ae, f.', czech: 'žláza' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'gutta, ae, f.', czech: 'kapka' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'hernia, ae, f.', czech: 'kýla' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'influenza, ae, f.', czech: 'chřipka' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'insufficientia, ae, f.', czech: 'nedostatečnost, selhání' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'lagoena, ae, f.', czech: 'lahvička' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'lingua, ae, f.', czech: 'jazyk' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'mandibula, ae, f.', czech: 'dolní čelist' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'maxilla, ae, f.', czech: 'horní čelist' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'mucosa, ae, f.', czech: 'sliznice' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'natura, ae, f.', czech: 'příroda, přirozenost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'patella, ae, f.', czech: 'čéška' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'pilula, ae, f.', czech: 'pilulka' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'pneumonia, ae, f.', czech: 'zápal plic' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'rhaphe, es, f.', czech: 'šev' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'ruptura, ae, f.', czech: 'prasklina, trhlina' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'scapula, ae, f.', czech: 'lopatka' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'scatula, ae, f.', czech: 'krabička' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'spina, ae, f.', czech: 'trn, hřeben, hrana' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'systole, es, f.', czech: 'systola, stažení srdeční svaloviny' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'sutura, ae, f.', czech: 'šev' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'tibia, ae, f.', czech: 'holenní kost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'tinctura, ae, f.', czech: 'tinktura, výtažek' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'tonsilla, ae, f.', czech: 'mandle' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'ulna, ae, f.', czech: 'loketní kost' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'vena, ae, f.', czech: 'žíla' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'verruca, ae, f.', czech: 'bradavice' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'vertebra, ae, f.', czech: 'obratel' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'vesica, ae, f.', czech: 'měchýř' },
+            { cat: 'Lekce II: 1. Deklinace', latin: 'vita, ae, f.', czech: 'život' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'acidum, i, n.', czech: 'kyselina' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'aegrotus, i, m.', czech: 'nemocný' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'ala, ae, f.', czech: 'křídlo' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'alvus, i, f.', czech: 'břicho' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'bacillus, i, m.', czech: 'bacil' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cancer, cri, m.', czech: 'rakovina' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'capitulum, i, n.', czech: 'hlavička' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cataracta, ae, f.', czech: 'šedý zákal' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cavum, i, n.', czech: 'dutina' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cellula, ae, f.', czech: 'buňka' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cerebrum, i, n.', czech: 'mozek' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'cibus, i, m.', czech: 'pokrm' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'collum, i, n.', czech: 'krk, krček' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'condylos, i, m.', czech: 'kloubní hrbol' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'colon, coli, n.', czech: 'tračník' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'delirium, ii, n.', czech: 'blouznění, třeštění' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'digitus, i, m.', czech: 'prst' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'dorsum, i, n.', czech: 'záda' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'duodenum, i, n.', czech: 'dvanáctník' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'fundus, i, m.', czech: 'dno, základ' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'humerus, i, m.', czech: 'pažní kost' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'intestinum, i, n.', czech: 'střevo' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'isthmus, i, m.', czech: 'zúžené místo' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'labium, ii, n.', czech: 'ret, pysk' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'lobus, i, m.', czech: 'lalok' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'locus, i, m.', czech: 'místo' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'mora, ae, f.', czech: 'prodlení, odklad' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'morbilli, orum, m.', czech: 'spalničky' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'morbus, i, m.', czech: 'nemoc, onemocnění' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'musculus, i, m.', czech: 'sval' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'nasus, i, m.', czech: 'nos' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'nervus, i, m.', czech: 'nerv' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'nucleus, i, m.', czech: 'jádro' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'numerus, i, m.', czech: 'počet' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'oculus, i, m.', czech: 'oko' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'olecranon, i, n.', czech: 'loket, loketní výběžek' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'orbita, ae, f.', czech: 'očnice' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'ostium, ii, n.', czech: 'ústí, vchod' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'ovarium, ii, n.', czech: 'vaječník' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'periculum, i, n.', czech: 'nebezpečí' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'palpebra, ae, f.', czech: 'oční víčko' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'periodus, i, f.', czech: 'období' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'radius, ii, m.', czech: 'úhel, vřetenní kost' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'ramus, i, m.', czech: 'větev' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'septum, i, n.', czech: 'přepážka' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'signum, i, n.', czech: 'znamení, příznak' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'sirupus, i, m.', czech: 'sirup' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'spasmus, i, m.', czech: 'křeč, křečovitý stah' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'statim', czech: 'ihned' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'sternum, i, n.', czech: 'hrudní kost' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'sutura, ae, f.', czech: 'šev' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'thymus, i, m.', czech: 'brzlík' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'unguentum, i, n.', czech: 'mast' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'uterus, i, m.', czech: 'děloha' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'venenum, i, n.', czech: 'jed' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'ventriculus, i, m.', czech: 'žaludek, srdeční komora' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'virus, i, n.', czech: 'virus' },
+            { cat: 'Lekce III: 2. Deklinace', latin: 'vitrum, i, n.', czech: 'lahvička, sklo' }
+        ];
+
+        const getVocabByCategory = (cat) => cat === 'Vše' ? vocabDatabase : vocabDatabase.filter(v => v.cat === cat);
+
+        const theoryChapters = [
+            {
+                id: 'lekce-1',
+                title: 'Lekce I: Výslovnost a mluvnické termíny',
+                content: (
+                    React.createElement('div', {className: 'space-y-4'},
+                        React.createElement('p', null, 'V současné latinské lékařské terminologii převládá ', React.createElement('strong', null, 'středoevropská poklasická výslovnost'), '.'),
+                        React.createElement('h3', {className: 'font-bold text-teal-700 mt-4'}, 'Samohlásky a Dvojhlásky'),
+                        React.createElement('p', null, 'Samohlásky mohou být krátké (a, e, i, o, u, y) a dlouhé (ā, ē, ī, ō, ū, ý). Dvojhlásky ae, oe čteme jako dlouhé é.'),
+                        React.createElement('h3', {className: 'font-bold text-teal-700 mt-4'}, 'Základní mluvnické termíny'),
+                        React.createElement('p', null, 'Latina rozlišuje 3 rody (m., f., n.), 2 čísla (sg., pl.) a 6 pádů.')
+                    )
+                )
+            }
+        ];
+
+        function App() {
+            const [currentSection, setCurrentSection] = useState('dashboard');
+            const [knownWords, setKnownWords] = useState({});
+
+            useEffect(() => {
+                const savedWords = localStorage.getItem('latinaKnownWords');
+                if (savedWords) setKnownWords(JSON.parse(savedWords));
+            }, []);
+
+            const updateKnownWords = (word, isKnown) => {
+                const updated = { ...knownWords, [word]: isKnown };
+                setKnownWords(updated);
+                localStorage.setItem('latinaKnownWords', JSON.stringify(updated));
+            };
+
+            return (
+                React.createElement('div', {className: 'flex h-screen bg-slate-50 font-sans text-slate-800'},
+                    React.createElement('aside', {className: 'w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-10 shrink-0'},
+                        React.createElement('div', {className: 'p-6 bg-slate-950 flex items-center justify-between border-b border-slate-800'},
+                            React.createElement('div', {className: 'flex items-center gap-3'},
+                                React.createElement(Stethoscope),
+                                React.createElement('div', null,
+                                    React.createElement('h1', {className: 'text-lg font-bold text-white leading-tight'}, 'Lékařská Latina'),
+                                    React.createElement('span', {className: 'text-xs text-teal-400'}, 'PhysioMetrics')
+                                )
+                            )
+                        ),
+                        React.createElement('nav', {className: 'flex-1 p-4 space-y-2'},
+                            React.createElement('button', {onClick: () => setCurrentSection('dashboard'), className: `w-full flex items-center gap-3 px-4 py-3 rounded-lg ${currentSection === 'dashboard' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`},
+                                React.createElement(LayoutDashboard), React.createElement('span', {className: 'font-medium'}, 'Přehled')
+                            ),
+                            React.createElement('button', {onClick: () => setCurrentSection('dictionary'), className: `w-full flex items-center gap-3 px-4 py-3 rounded-lg ${currentSection === 'dictionary' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`},
+                                React.createElement(BookOpen), React.createElement('span', {className: 'font-medium'}, 'Slovníček')
+                            )
+                        )
+                    ),
+                    React.createElement('main', {className: 'flex-1 p-10 overflow-y-auto'},
+                        currentSection === 'dashboard' ? (
+                            React.createElement('div', {className: 'max-w-4xl mx-auto space-y-6'},
+                                React.createElement('h2', {className: 'text-3xl font-bold text-slate-900'}, 'Vítejte ve studiu, Ráďo!'),
+                                React.createElement('p', {className: 'text-slate-600'}, 'Aplikace PhysioMetrics běží 24/7 online.'),
+                                React.createElement('div', {className: 'bg-white p-6 rounded-xl border border-slate-200 shadow-sm'},
+                                    React.createElement('h3', {className: 'text-xl font-bold text-teal-800 mb-3'}, 'Slovníček v databázi'),
+                                    React.createElement('ul', {className: 'divide-y divide-slate-100'},
+                                        vocabDatabase.slice(0, 10).map((item, index) => (
+                                            React.createElement('li', {key: index, className: 'py-3 flex justify-between'},
+                                                React.createElement('span', {className: 'font-semibold'}, item.latin),
+                                                React.createElement('span', {className: 'text-teal-700'}, item.czech)
+                                            )
+                                        ))
+                                    )
+                                )
+                            )
+                        ) : (
+                            React.createElement('div', {className: 'max-w-4xl mx-auto'},
+                                React.createElement('h2', {className: 'text-3xl font-bold text-slate-900 mb-4'}, 'Slovníček'),
+                                React.createElement('div', {className: 'bg-white rounded-xl border border-slate-200 p-6'},
+                                    vocabDatabase.map((item, index) => (
+                                        React.createElement('div', {key: index, className: 'py-2 border-b border-slate-100 flex justify-between'},
+                                            React.createElement('span', {className: 'font-semibold'}, item.latin),
+                                            React.createElement('span', {className: 'text-teal-700'}, item.czech)
+                                        )
+                                    ))
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    </script>
 </body>
 </html>
