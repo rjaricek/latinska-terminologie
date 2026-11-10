@@ -55,8 +55,8 @@
     const Info = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     );
-    const Sparkles = ({ className = "w-5 h-5" }) => (
-      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2 0h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+    const CheckSquare = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     );
 
     // --- DATABÁZE SLOVÍČEK ---
@@ -552,7 +552,6 @@
                 </table>
               </div>
             </div>
-            <p className="text-xs text-slate-500 italic">Zlaté pravidlo pro neutra: Nominativ a akuzativ jsou vždy naprosto totožné a v plurálu končí na -a!</p>
           </div>
         )
       },
@@ -912,7 +911,7 @@
         <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-4 md:space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Slovník</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Slovníček</h2>
               <p className="text-xs md:text-sm text-slate-500">Nalezeno {filtered.length} výrazů</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
@@ -1054,16 +1053,20 @@
       );
     }
 
-    // --- QUIZ MODULE SE ZPĚTNOU VAZBOU ---
+    // --- QUIZ MODULE (SPRAVĚNÁ ZPĚTNÁ VAZBA & VOLBA POČTU OTÁZEK) ---
     function QuizModule({ vocab, allVocab }) {
       const [started, setStarted] = useState(false);
       const [questions, setQuestions] = useState([]);
       const [qIdx, setQIdx] = useState(0);
       const [score, setScore] = useState(0);
       const [selectedAnswer, setSelectedAnswer] = useState(null);
+      const [questionCount, setQuestionCount] = useState(10);
 
       const startQuiz = () => {
-        const limit = Math.min(10, vocab.length);
+        let limit = questionCount === 'all' ? vocab.length : parseInt(questionCount);
+        if (isNaN(limit) || limit > vocab.length) limit = vocab.length;
+        if (limit < 1) limit = 1;
+
         const shuffled = [...vocab].sort(() => 0.5 - Math.random()).slice(0, limit);
         const generated = shuffled.map(correct => {
           const wrong = allVocab.filter(w => w.czech !== correct.czech).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.czech);
@@ -1080,9 +1083,12 @@
       const handleSelectOption = (opt) => {
         if (selectedAnswer !== null) return;
         setSelectedAnswer(opt);
-        if (opt === questions[qIdx].correctAnswer) {
-          setScore(s => s + 1);
+        
+        const isCorrect = opt === questions[qIdx].correctAnswer;
+        if (isCorrect) {
+          setScore(prev => prev + 1);
         }
+
         setTimeout(() => {
           setQIdx(prev => prev + 1);
           setSelectedAnswer(null);
@@ -1090,20 +1096,39 @@
       };
 
       if (!started) return (
-        <div className="text-center p-8 bg-white rounded-2xl border max-w-md w-full">
+        <div className="text-center p-6 md:p-8 bg-white rounded-2xl border max-w-md w-full shadow-sm">
           <CheckSquare className="w-12 h-12 text-teal-600 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-slate-900 mb-2">Zkušební kvíz</h3>
-          <p className="text-slate-500 text-sm mb-6">Test obsahuje 10 náhodných slovíček z vybraného okruhu.</p>
-          <button onClick={startQuiz} className="w-full py-3.5 bg-teal-600 text-white font-bold rounded-xl shadow-md hover:bg-teal-700">Spustit cvičení</button>
+          <p className="text-slate-500 text-sm mb-6">Testování z latinských slovíček a překladu do češtiny.</p>
+          
+          <div className="mb-6 text-left">
+            <label className="block text-xs font-bold text-slate-600 uppercase mb-2">Počet otázek:</label>
+            <div className="grid grid-cols-5 gap-2">
+              {[5, 10, 15, 20, 'all'].map(num => (
+                <button
+                  key={num}
+                  onClick={() => setQuestionCount(num)}
+                  className={`py-2 rounded-xl text-sm font-bold border ${questionCount === num ? 'bg-teal-600 text-white border-teal-600' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'}`}
+                >
+                  {num === 'all' ? 'Vše' : num}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-slate-400 mt-2">Dostupných slovíček v lekci: {vocab.length}</p>
+          </div>
+
+          <button onClick={startQuiz} className="w-full py-3.5 bg-teal-600 text-white font-bold rounded-xl shadow-md hover:bg-teal-700 transition-colors">
+            Spustit kvíz
+          </button>
         </div>
       );
 
       if (qIdx >= questions.length) return (
-        <div className="text-center p-8 bg-white rounded-2xl border max-w-md w-full">
+        <div className="text-center p-8 bg-white rounded-2xl border max-w-md w-full shadow-sm">
           <Trophy className="w-12 h-12 text-amber-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2">Cvičení dokončeno!</h2>
-          <p className="text-lg text-slate-600 mb-6">Váš výsledek: <span className="font-bold text-slate-900">{score} z {questions.length}</span></p>
-          <button onClick={startQuiz} className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800">Spustit nový kvíz</button>
+          <p className="text-lg text-slate-600 mb-6">Váš výsledek: <span className="font-bold text-slate-900">{score} z {questions.length}</span> ({Math.round((score/questions.length)*100)}%)</p>
+          <button onClick={() => setStarted(false)} className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors">Spustit nový kvíz</button>
         </div>
       );
 
@@ -1122,22 +1147,24 @@
 
           <div className="grid grid-cols-1 gap-2.5">
             {q.options.map((opt, i) => {
-              let btnClass = "bg-white border-2 border-slate-200 text-slate-700 hover:border-teal-400";
+              let btnStyle = "bg-white border-2 border-slate-200 text-slate-700 hover:border-teal-400";
+              
               if (selectedAnswer !== null) {
                 if (opt === q.correctAnswer) {
-                  btnClass = "bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold shadow-md";
+                  btnStyle = "bg-emerald-500 border-2 border-emerald-600 text-white font-bold shadow-md";
                 } else if (opt === selectedAnswer) {
-                  btnClass = "bg-rose-50 border-2 border-rose-500 text-rose-800 font-bold shadow-md";
+                  btnStyle = "bg-rose-500 border-2 border-rose-600 text-white font-bold shadow-md";
                 } else {
-                  btnClass = "bg-white border-2 border-slate-100 text-slate-300 opacity-40";
+                  btnStyle = "bg-slate-50 border-2 border-slate-100 text-slate-300 opacity-50";
                 }
               }
+
               return (
                 <button 
                   key={i} 
                   onClick={() => handleSelectOption(opt)} 
                   disabled={selectedAnswer !== null} 
-                  className={`p-4 rounded-xl text-base text-left font-medium transition-all ${btnClass}`}
+                  className={`p-4 rounded-xl text-base text-left font-medium transition-all ${btnStyle}`}
                 >
                   {opt}
                 </button>
