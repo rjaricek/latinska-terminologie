@@ -670,7 +670,7 @@ const theoryChapters = [
 ];
 
 // --- MAIN APP COMPONENT ---
-export default function LekarskaLatinaApp() {
+export default function App() {
   const [currentSection, setCurrentSection] = useState('dashboard'); // 'dashboard', 'theory', 'practice', 'dictionary', 'sources'
   const [activeTheoryChapter, setActiveTheoryChapter] = useState(theoryChapters[0].id);
   const [practiceMode, setPracticeMode] = useState('flashcards'); // 'flashcards', 'quiz'
@@ -743,7 +743,7 @@ export default function LekarskaLatinaApp() {
               <h1 className="text-lg font-bold text-white leading-tight">Lékařská Latina</h1>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] px-1.5 py-0.2 rounded font-semibold flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5" /> BETA
+                  <Sparkles className="w-2.5 h-2.5" /> GITHUB
                 </span>
                 <span className="text-xs text-slate-400">Učebnice</span>
               </div>
@@ -815,7 +815,7 @@ function Dashboard({ knownWords, setSection }) {
           <p className="text-slate-500 mt-2">Komplexní příprava na test dle skript Fakulty zdravotnických studií.</p>
         </div>
         <div className="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-amber-600" /> Beta Verze 1.2
+          <Sparkles className="w-4 h-4 text-amber-600" /> Open Source Edition
         </div>
       </header>
 
