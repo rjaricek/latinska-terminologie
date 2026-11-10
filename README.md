@@ -1,1 +1,1 @@
-# lekarska-latina
+# latinska-terminologie
