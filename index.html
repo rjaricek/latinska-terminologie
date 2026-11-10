@@ -12,13 +12,13 @@
   <!-- Babel pro překlad JSX v prohlížeči -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // --- ČISTÉ SVG IKONY (BEZ PAZÚRŮ CDN LIBRARIES) ---
+    // --- BEZPEČNÉ SVG IKONY ---
     const BookOpen = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
     );
@@ -49,9 +49,6 @@
     const Stethoscope = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
     );
-    const CheckSquare = ({ className = "w-5 h-5" }) => (
-      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-    );
     const ListFilter = ({ className = "w-5 h-5" }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
     );
@@ -62,7 +59,7 @@
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2 0h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
     );
 
-    // --- COMPLETE VOCABULARY DATABASE (400+ ITEMS) ---
+    // --- DATABÁZE SLOVÍČEK ---
     const vocabDatabase = [
       // Lekce II: 1. Deklinace
       { cat: 'Lekce II: 1. Deklinace', latin: 'angina, ae, f.', czech: 'angina' },
@@ -465,7 +462,7 @@
 
     const getVocabByCategory = (cat) => cat === 'Vše' ? vocabDatabase : vocabDatabase.filter(v => v.cat === cat);
 
-    // --- THEORY CHAPTERS WITH ALL DECLENSION TABLES ---
+    // --- TEORIE S KOMPLETNÍMI TABULKAMI ---
     const theoryChapters = [
       {
         id: 'lekce-1',
@@ -493,22 +490,29 @@
         content: (
           <div className="space-y-4">
             <p>Do I. deklinace zařazujeme substantiva zakončená v nom. sg. na <strong>-a</strong> a v gen. sg. na <strong>-ae</strong> (většina jsou feminina). Vzor: <strong>vēna, ae, f.</strong></p>
+            
             <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
               <h4 className="font-bold mb-2 text-teal-800">Tabulka skloňování vzoru vēna</h4>
-              <table className="w-full text-sm text-left">
-                <thead><tr className="border-b border-slate-300"><th className="pb-2">Pád</th><th className="pb-2">Singulár</th><th className="pb-2">Plurál</th></tr></thead>
-                <tbody>
-                  <tr className="border-b border-slate-200"><td>Nominativ</td><td>vēna (-a)</td><td>vēnae (-ae)</td></tr>
-                  <tr className="border-b border-slate-200"><td>Genitiv</td><td>vēnae (-ae)</td><td>vēnārum (-ārum)</td></tr>
-                  <tr className="border-b border-slate-200"><td>Dativ</td><td>vēnae (-ae)</td><td>vēnīs (-īs)</td></tr>
-                  <tr className="border-b border-slate-200"><td>Akuzativ</td><td>vēnam (-am)</td><td>vēnās (-ās)</td></tr>
-                  <tr><td>Ablativ</td><td>vēnā (-ā)</td><td>vēnīs (-īs)</td></tr>
+              <table className="w-full text-sm text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-300"><th className="pb-2">Pád</th><th className="pb-2">Singulár</th><th className="pb-2">Plurál</th></tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr><td className="py-2 font-medium">Nominativ</td><td>vēna (-a)</td><td>vēnae (-ae)</td></tr>
+                  <tr><td className="py-2 font-medium">Genitiv</td><td>vēnae (-ae)</td><td>vēnārum (-ārum)</td></tr>
+                  <tr><td className="py-2 font-medium">Dativ</td><td>vēnae (-ae)</td><td>vēnīs (-īs)</td></tr>
+                  <tr><td className="py-2 font-medium">Akuzativ</td><td>vēnam (-am)</td><td>vēnās (-ās)</td></tr>
+                  <tr><td className="py-2 font-medium">Ablativ</td><td>vēnā (-ā)</td><td>vēnīs (-īs)</td></tr>
                 </tbody>
               </table>
             </div>
+
+            <h3 className="font-bold text-teal-700 mt-4">Řecká substantiva 1. deklinace</h3>
+            <p>Slova jako <em>diabētēs</em> (m.), <em>systolē</em> (f.) zachovávají řecké koncovky v jednotném čísle (-ēs, -ae, -en, -ē).</p>
+
             <h3 className="font-bold text-teal-700 mt-4">Předložky v latině</h3>
             <p><strong>S ablativem:</strong> ā/ab (od), cum (s), ē/ex (z, ze), prō (pro, kvůli), sine (bez).</p>
-            <p><strong>S akuzativem:</strong> ad/apud (k, do), ante (před), contrā (proti), inter (mezi), intrā (uvnitř), post (po), propter (kvůli).</p>
+            <p><strong>S akuzativem:</strong> ad/apud (k, do), ante (před), contrā (proti), inter (mezi), intrā (uvnitř, v), post (po), propter (pro, kvůli), super (nad).</p>
           </div>
         )
       },
@@ -517,33 +521,38 @@
         title: 'Lekce III: II. Deklinace',
         content: (
           <div className="space-y-4">
-            <p>Do II. deklinace řadíme maskulina na <strong>-us, -er</strong> (genitiv na <strong>-ī</strong>) a neutra na <strong>-um</strong>. Vzory: <strong>mūsculus, ī, m.</strong> a <strong>cavum, ī, n.</strong></p>
+            <p>Do II. deklinace řadíme maskulina na <strong>-us, -er</strong> (genitiv na <strong>-ī</strong>) a neutra na <strong>-um</strong>. Vzory: <strong>mūsculus, ī, m.</strong>, <strong>cancer, crī, m.</strong> a <strong>cavum, ī, n.</strong></p>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
               <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
                 <h4 className="font-bold mb-2 text-teal-800">Vzor: mūsculus / cancer (m.)</h4>
                 <table className="w-full text-sm text-left">
                   <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Sg.</th><th>Pl.</th></tr></thead>
-                  <tbody>
-                    <tr className="border-b border-slate-200"><td>Nom.</td><td>mūsculus / cancer</td><td>mūsculī / cancrī</td></tr>
-                    <tr className="border-b border-slate-200"><td>Gen.</td><td>mūsculī / cancrī</td><td>mūsculōrum / cancrōrum</td></tr>
-                    <tr className="border-b border-slate-200"><td>Akuz.</td><td>mūsculum / cancrum</td><td>mūsculōs / cancrōs</td></tr>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr><td>Nom.</td><td>mūsculus / cancer</td><td>mūsculī / cancrī</td></tr>
+                    <tr><td>Gen.</td><td>mūsculī / cancrī</td><td>mūsculōrum / cancrōrum</td></tr>
+                    <tr><td>Dat.</td><td>mūsculō / cancrō</td><td>mūsculīs / cancris</td></tr>
+                    <tr><td>Akuz.</td><td>mūsculum / cancrum</td><td>mūsculōs / cancrōs</td></tr>
                     <tr><td>Abl.</td><td>mūsculō / cancrō</td><td>mūsculīs / cancris</td></tr>
                   </tbody>
                 </table>
               </div>
+
               <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
                 <h4 className="font-bold mb-2 text-teal-800">Vzor: cavum (n.)</h4>
                 <table className="w-full text-sm text-left">
                   <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Sg.</th><th>Pl.</th></tr></thead>
-                  <tbody>
-                    <tr className="border-b border-slate-200"><td>Nom.</td><td>cavum</td><td>cava</td></tr>
-                    <tr className="border-b border-slate-200"><td>Gen.</td><td>cavī</td><td>cavōrum</td></tr>
-                    <tr className="border-b border-slate-200"><td>Akuz.</td><td>cavum</td><td>cava</td></tr>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr><td>Nom.</td><td>cavum</td><td>cava</td></tr>
+                    <tr><td>Gen.</td><td>cavī</td><td>cavōrum</td></tr>
+                    <tr><td>Dat.</td><td>cavō</td><td>cavīs</td></tr>
+                    <tr><td>Akuz.</td><td>cavum</td><td>cava</td></tr>
                     <tr><td>Abl.</td><td>cavō</td><td>cavīs</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
+            <p className="text-xs text-slate-500 italic">Zlaté pravidlo pro neutra: Nominativ a akuzativ jsou vždy naprosto totožné a v plurálu končí na -a!</p>
           </div>
         )
       },
@@ -553,14 +562,19 @@
         content: (
           <div className="space-y-4">
             <p>Adjektiva 1. a 2. deklinace se skloňují podle rodů: maskulina podle <em>mūsculus/cancer</em>, feminina podle <em>vēna</em> a neutra podle <em>cavum</em>.</p>
+            
             <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
-              <h4 className="font-bold mb-2 text-teal-800">Skloňování adjektiva acūtus, a, um</h4>
-              <table className="w-full text-sm text-left">
-                <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Masc. Sg.</th><th>Fem. Sg.</th><th>Neut. Sg.</th><th>Masc. Pl.</th><th>Fem. Pl.</th><th>Neut. Pl.</th></tr></thead>
-                <tbody>
-                  <tr className="border-b border-slate-200 font-medium"><td>Nom.</td><td>acūtus</td><td>acūta</td><td>acūtum</td><td>acūtī</td><td>acūtae</td><td>acūta</td></tr>
-                  <tr className="border-b border-slate-200"><td>Gen.</td><td>acūtī</td><td>acūtae</td><td>acūtī</td><td>acūtōrum</td><td>acūtārum</td><td>acūtōrum</td></tr>
-                  <tr className="border-b border-slate-200"><td>Akuz.</td><td>acūtum</td><td>acūtam</td><td>acūtum</td><td>acūtōs</td><td>acūtās</td><td>acūta</td></tr>
+              <h4 className="font-bold mb-2 text-teal-800">Skloňování adjektiva acūtus, a, um (1. a 2. dekl.)</h4>
+              <table className="w-full text-sm text-left min-w-[500px]">
+                <thead>
+                  <tr className="border-b border-slate-300">
+                    <th>Pád</th><th>Masc. Sg.</th><th>Fem. Sg.</th><th>Neut. Sg.</th><th>Masc. Pl.</th><th>Fem. Pl.</th><th>Neut. Pl.</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr className="font-medium"><td>Nom.</td><td>acūtus</td><td>acūta</td><td>acūtum</td><td>acūtī</td><td>acūtae</td><td>acūta</td></tr>
+                  <tr><td>Gen.</td><td>acūtī</td><td>acūtae</td><td>acūtī</td><td>acūtōrum</td><td>acūtārum</td><td>acūtōrum</td></tr>
+                  <tr><td>Akuz.</td><td>acūtum</td><td>acūtam</td><td>acūtum</td><td>acūtōs</td><td>acūtās</td><td>acūta</td></tr>
                   <tr><td>Abl.</td><td>acūtō</td><td>acūtā</td><td>acūtō</td><td>acūtīs</td><td>acūtīs</td><td>acūtīs</td></tr>
                 </tbody>
               </table>
@@ -573,7 +587,35 @@
         title: 'Lekce V: III. Deklinace (substantiva)',
         content: (
           <div className="space-y-4">
-            <p>Substantiva 3. deklinace mají v genitivu singuláru koncovku <strong>-is</strong>. Vzory: <em>dolor</em> (m.), <em>caput</em> (n.), <em>pelvis</em> (f.), <em>rēte</em> (n.).</p>
+            <p>Substantiva 3. deklinace mají v genitivu singuláru koncovku <strong>-is</strong>. Dělí se na různoslabičná (vzor <em>dolor</em> / <em>caput</em>) a stejnoslabičná (vzor <em>pelvis</em> / <em>rēte</em>).</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+              <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
+                <h4 className="font-bold mb-2 text-teal-800">Vzor: dolor (m.) & caput (n.)</h4>
+                <table className="w-full text-sm text-left">
+                  <thead><tr className="border-b border-slate-300"><th>Pád</th><th>dolor Sg.</th><th>dolor Pl.</th></tr></thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr><td>Nom.</td><td>dolor</td><td>dolōrēs</td></tr>
+                    <tr><td>Gen.</td><td>dolōris</td><td>dolōrum</td></tr>
+                    <tr><td>Akuz.</td><td>dolōrem</td><td>dolōrēs</td></tr>
+                    <tr><td>Abl.</td><td>dolōre</td><td>dolōribus</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
+                <h4 className="font-bold mb-2 text-teal-800">Vzor: pelvis (f.) & rēte (n.)</h4>
+                <table className="w-full text-sm text-left">
+                  <thead><tr className="border-b border-slate-300"><th>Pád</th><th>pelvis Sg.</th><th>pelvis Pl.</th></tr></thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr><td>Nom.</td><td>pelvis</td><td>pelvēs</td></tr>
+                    <tr><td>Gen.</td><td>pelvis</td><td>pelvium</td></tr>
+                    <tr><td>Akuz.</td><td>pelvem</td><td>pelvēs</td></tr>
+                    <tr><td>Abl.</td><td>pelve</td><td>pelvibus</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )
       },
@@ -583,6 +625,22 @@
         content: (
           <div className="space-y-4">
             <p>Adjektiva 3. deklinace dělíme na trojvýchodná (<em>ācer, acris, ācre</em>), dvojvýchodná (<em>brevis, e</em>) a jednovýchodná (<em>simplex</em>).</p>
+            
+            <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
+              <h4 className="font-bold mb-2 text-teal-800">Přehled koncovek adjektiv 3. deklinace</h4>
+              <table className="w-full text-sm text-left min-w-[450px]">
+                <thead>
+                  <tr className="border-b border-slate-300"><th>Pád</th><th>Trojvýchodná</th><th>Dvojvýchodná</th><th>Jednovýchodná</th></tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr><td>Nom. Sg.</td><td>ācer, acris, ācre</td><td>brevis, breve</td><td>simplex</td></tr>
+                  <tr><td>Gen. Sg.</td><td>ācris</td><td>brevis</td><td>simplicis</td></tr>
+                  <tr><td>Abl. Sg.</td><td>ācrī</td><td>brevī</td><td>simplīcī</td></tr>
+                  <tr><td>Nom. Pl. (n.)</td><td>ācria</td><td>brevia</td><td>simplicia</td></tr>
+                  <tr><td>Gen. Pl.</td><td>acrium</td><td>brevium</td><td>simplicium</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         )
       },
@@ -591,7 +649,23 @@
         title: 'Lekce VII: IV. Deklinace',
         content: (
           <div className="space-y-4">
-            <p>Substantiva 4. deklinace mají v genitivu sg. koncovku <strong>-ūs</strong>. Vzory: <em>cāsus, ūs, m.</em> a <em>genū, ūs, n.</em></p>
+            <p>Substantiva 4. deklinace jsou zakončena v nom. sg. na <strong>-us</strong> (maskulina) nebo <strong>-ū</strong> (neutra). Genitiv končí na <strong>-ūs</strong>. Vzory: <strong>cāsus, ūs, m.</strong> a <strong>genū, ūs, n.</strong></p>
+            
+            <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
+              <h4 className="font-bold mb-2 text-teal-800">Skloňování vzorů cāsus (m.) a genū (n.)</h4>
+              <table className="w-full text-sm text-left">
+                <thead>
+                  <tr className="border-b border-slate-300"><th>Pád</th><th>cāsus (Sg.)</th><th>cāsus (Pl.)</th><th>genū (Sg.)</th><th>genū (Pl.)</th></tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr><td>Nom.</td><td>cāsus</td><td>cāsūs</td><td>genū</td><td>genua</td></tr>
+                  <tr><td>Gen.</td><td>cāsūs</td><td>cāsuum</td><td>genūs</td><td>genuum</td></tr>
+                  <tr><td>Dat.</td><td>cāsuī</td><td>casibus</td><td>genū</td><td>genibus</td></tr>
+                  <tr><td>Akuz.</td><td>cāsum</td><td>cāsūs</td><td>genū</td><td>genua</td></tr>
+                  <tr><td>Abl.</td><td>cāsū</td><td>casibus</td><td>genū</td><td>genibus</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         )
       },
@@ -600,7 +674,21 @@
         title: 'Lekce VIII: V. Deklinace a přehled',
         content: (
           <div className="space-y-4">
-            <p>Substantiva 5. deklinace mají v genitivu sg. koncovku <strong>-ēī / -eī</strong>. Vzor: <em>rēs, reī, f.</em></p>
+            <p>Do 5. deklinace řadíme substantiva zakončená v nom. sg. na <strong>-ēs</strong> a v gen. sg. na <strong>-ēī / -eī</strong>. Vzor: <strong>rēs, reī, f.</strong></p>
+            
+            <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
+              <h4 className="font-bold mb-2 text-teal-800">Vzor: rēs, reī, f.</h4>
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Singulár</th><th>Plurál</th></tr></thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr><td>Nom.</td><td>rēs</td><td>rēs</td></tr>
+                  <tr><td>Gen.</td><td>reī</td><td>rērum</td></tr>
+                  <tr><td>Dat.</td><td>reī</td><td>rēbus</td></tr>
+                  <tr><td>Akuz.</td><td>rem</td><td>rēs</td></tr>
+                  <tr><td>Abl.</td><td>rē</td><td>rēbus</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         )
       },
@@ -609,14 +697,17 @@
         title: 'Lekce IX: Stupňování adjektiv',
         content: (
           <div className="space-y-4">
-            <p><strong>Komparativ (2. stupeň):</strong> Přípona <em>-ior, -ius</em> (skloňování dle 3. deklinace).</p>
-            <p><strong>Superlativ (3. stupeň):</strong> Přípona <em>-issimus, a, um</em> (skloňování dle 1. a 2. deklinace).</p>
+            <p><strong>Komparativ (2. stupeň):</strong> Tvoří se příponou <em>-ior</em> (m/f) a <em>-ius</em> (n) od genitivního kmene (např. <em>longior, longius</em>).</p>
+            <p><strong>Superlativ (3. stupeň):</strong> Tvoří se příponou <em>-issimus, a, um</em>.</p>
+            <div className="bg-teal-50 p-4 rounded-lg text-teal-900 font-medium my-2">
+              Nepravidelné stupňování: magnus – maior – maximus | parvus – minor – minimus | bonus – melior – optimus | malus – peior – pessimus.
+            </div>
           </div>
         )
       }
     ];
 
-    // --- MAIN APP COMPONENT ---
+    // --- HLAVNÍ KOMPONENTA ---
     function App() {
       const [currentSection, setCurrentSection] = useState('dashboard');
       const [activeTheoryChapter, setActiveTheoryChapter] = useState(theoryChapters[0].id);
@@ -624,6 +715,7 @@
       const [practiceCategory, setPracticeCategory] = useState('Vše');
       const [dictCategory, setDictCategory] = useState('Vše');
       const [dictSearch, setDictSearch] = useState('');
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
       
       const [knownWords, setKnownWords] = useState({});
 
@@ -642,8 +734,16 @@
         } catch (e) {}
       };
 
+      const navItems = [
+        { id: 'dashboard', label: 'Přehled', icon: LayoutDashboard },
+        { id: 'theory', label: 'Teorie & Tabulky', icon: BookOpen },
+        { id: 'practice', label: 'Cvičení & Kartičky', icon: Dumbbell },
+        { id: 'dictionary', label: 'Slovníček (Vše)', icon: ListFilter },
+        { id: 'sources', label: 'Zdroje & Literatura', icon: Info },
+      ];
+
       return (
-        <div className="flex h-screen bg-slate-50 font-sans text-slate-800">
+        <div className="flex flex-col md:flex-row h-screen bg-slate-50 font-sans text-slate-800 overflow-hidden">
           <style dangerouslySetInnerHTML={{__html: `
             .perspective-1000 { perspective: 1000px; }
             .transform-style-3d { transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -651,37 +751,62 @@
             .rotate-y-180 { transform: rotateY(180deg); }
           `}} />
 
-          {/* Sidebar */}
-          <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-10 shrink-0">
-            <div className="p-6 bg-slate-950 flex items-center justify-between border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <Stethoscope className="w-8 h-8 text-teal-500" />
-                <div>
-                  <h1 className="text-lg font-bold text-white leading-tight">Lékařská Latina</h1>
-                  <span className="text-xs text-amber-400 font-semibold">BETA verze</span>
-                </div>
+          {/* MOBILNÍ HORNÍ LIŠTA */}
+          <div className="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center shrink-0 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Stethoscope className="w-6 h-6 text-teal-500" />
+              <span className="font-bold">Lékařská Latina</span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 bg-slate-800 rounded-lg text-slate-300">
+              <ListFilter className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* MOBILNÍ DROPDOWN MENU */}
+          {mobileMenuOpen && (
+            <div className="md:hidden bg-slate-900 border-b border-slate-800 p-4 space-y-2 shrink-0 z-50">
+              {navItems.map(item => {
+                const Icon = item.icon;
+                return (
+                  <button 
+                    key={item.id} 
+                    onClick={() => { setCurrentSection(item.id); setMobileMenuOpen(false); }} 
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${currentSection === item.id ? 'bg-teal-600 text-white' : 'text-slate-300 bg-slate-800/50'}`}
+                  >
+                    <Icon className="w-5 h-5" /> {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* DESKTOP SIDEBAR */}
+          <aside className="hidden md:flex w-64 bg-slate-900 text-slate-300 flex-col shadow-xl z-10 shrink-0">
+            <div className="p-6 bg-slate-950 flex items-center gap-3 border-b border-slate-800">
+              <Stethoscope className="w-8 h-8 text-teal-500" />
+              <div>
+                <h1 className="text-lg font-bold text-white leading-tight">Lékařská Latina</h1>
+                <span className="text-xs text-amber-400 font-semibold">Učebnice FZS</span>
               </div>
             </div>
 
             <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-2">
-              <button onClick={() => setCurrentSection('dashboard')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'dashboard' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <LayoutDashboard /> <span className="font-medium">Přehled</span>
-              </button>
-              <button onClick={() => setCurrentSection('theory')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'theory' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <BookOpen /> <span className="font-medium">Teorie & Tabulky</span>
-              </button>
-              <button onClick={() => setCurrentSection('practice')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'practice' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <Dumbbell /> <span className="font-medium">Cvičení & Kartičky</span>
-              </button>
-              <button onClick={() => setCurrentSection('dictionary')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'dictionary' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <ListFilter /> <span className="font-medium">Slovníček (Vše)</span>
-              </button>
-              <button onClick={() => setCurrentSection('sources')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'sources' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <Info /> <span className="font-medium">Zdroje & Literatura</span>
-              </button>
+              {navItems.map(item => {
+                const Icon = item.icon;
+                return (
+                  <button 
+                    key={item.id} 
+                    onClick={() => setCurrentSection(item.id)} 
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium ${currentSection === item.id ? 'bg-teal-600 text-white' : 'hover:bg-slate-800 hover:text-white'}`}
+                  >
+                    <Icon className="w-5 h-5" /> {item.label}
+                  </button>
+                );
+              })}
             </nav>
           </aside>
 
+          {/* HLAVNÍ OBSAH */}
           <main className="flex-1 overflow-y-auto">
             {currentSection === 'dashboard' && <Dashboard knownWords={knownWords} setSection={setCurrentSection} />}
             {currentSection === 'theory' && <TheoryView activeChapter={activeTheoryChapter} setChapter={setActiveTheoryChapter} />}
@@ -702,53 +827,71 @@
       const progressPercent = Math.round((learnedWords / totalWords) * 100) || 0;
 
       return (
-        <div className="p-8 max-w-5xl mx-auto space-y-8">
-          <header>
-            <h2 className="text-3xl font-bold text-slate-900">Vítejte ve studiu lékařské latiny</h2>
-            <p className="text-slate-500 mt-2">Komplexní příprava na test dle skript Fakulty zdravotnických studií.</p>
+        <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6 md:space-y-8">
+          <header className="flex justify-between items-start">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Vítejte ve studiu lékařské latiny</h2>
+              <p className="text-slate-500 text-sm md:text-base mt-1">Komplexní příprava na test dle skript Fakulty zdravotnických studií.</p>
+            </div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-teal-900 to-slate-800 text-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-gradient-to-br from-teal-900 to-slate-800 text-white p-6 rounded-2xl shadow-md flex flex-col justify-between">
               <div className="flex items-center gap-4 mb-6">
-                <BrainCircuit className="w-10 h-10 text-teal-400" />
+                <BrainCircuit className="w-10 h-10 text-teal-400 shrink-0" />
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-200">Zvládnutá slovíčka</h3>
+                  <h3 className="text-base font-semibold text-slate-200">Zvládnutá slovíčka</h3>
                   <p className="text-3xl font-bold">{learnedWords} / {totalWords}</p>
                 </div>
               </div>
-              <div className="w-full bg-slate-700 rounded-full h-2.5">
-                <div className="bg-teal-400 h-2.5 rounded-full" style={{ width: `${progressPercent}%` }}></div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs text-slate-300">
+                  <span>Celkový pokrok v databázi</span>
+                  <span>{progressPercent}%</span>
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2.5">
+                  <div className="bg-teal-400 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
-              <h3 className="text-lg font-bold">Rychlý rozcestník</h3>
-              <button onClick={() => setSection('theory')} className="w-full p-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-left font-medium flex justify-between">Teorie a tabulky <ChevronRight /></button>
-              <button onClick={() => setSection('dictionary')} className="w-full p-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-left font-medium flex justify-between">Kompletní slovníček <ChevronRight /></button>
-              <button onClick={() => setSection('practice')} className="w-full p-3 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-lg text-left font-medium flex justify-between">Kartičky a Kvíz <ChevronRight /></button>
+            <div className="bg-white p-6 rounded-2xl border shadow-sm space-y-3">
+              <h3 className="text-base font-bold text-slate-900">Rychlý rozcestník</h3>
+              <button onClick={() => setSection('theory')} className="w-full p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left font-medium text-sm flex justify-between items-center">
+                <span>Teorie a tabulky deklinací</span> <ChevronRight className="w-4 h-4 text-slate-400" />
+              </button>
+              <button onClick={() => setSection('dictionary')} className="w-full p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left font-medium text-sm flex justify-between items-center">
+                <span>Kompletní slovníček</span> <ChevronRight className="w-4 h-4 text-slate-400" />
+              </button>
+              <button onClick={() => setSection('practice')} className="w-full p-3 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-xl text-left font-medium text-sm flex justify-between items-center">
+                <span>Spustit Kartičky / Kvíz</span> <ChevronRight className="w-4 h-4 text-teal-600" />
+              </button>
             </div>
           </div>
         </div>
       );
     }
 
-    // --- THEORY VIEW ---
+    // --- TEORIE VIEW ---
     function TheoryView({ activeChapter, setChapter }) {
       const activeContent = theoryChapters.find(c => c.id === activeChapter);
       return (
-        <div className="flex h-full">
-          <div className="w-1/3 max-w-sm border-r bg-white p-4 space-y-1">
-            <h2 className="text-xl font-bold p-2 mb-2">Teorie & Tabulky</h2>
+        <div className="flex flex-col md:flex-row h-full">
+          <div className="w-full md:w-1/3 max-w-none md:max-w-xs border-b md:border-b-0 md:border-r bg-white p-4 overflow-x-auto md:overflow-y-auto flex md:flex-col gap-2 shrink-0">
+            <h2 className="hidden md:block text-lg font-bold p-2 mb-2 text-slate-900">Teorie & Tabulky</h2>
             {theoryChapters.map(ch => (
-              <button key={ch.id} onClick={() => setChapter(ch.id)} className={`w-full text-left p-3 rounded-lg text-sm ${activeChapter === ch.id ? 'bg-teal-50 text-teal-800 font-bold' : 'hover:bg-slate-50'}`}>
+              <button 
+                key={ch.id} 
+                onClick={() => setChapter(ch.id)} 
+                className={`text-left p-3 rounded-xl text-xs md:text-sm whitespace-nowrap md:whitespace-normal shrink-0 font-medium ${activeChapter === ch.id ? 'bg-teal-50 text-teal-800 font-bold border border-teal-200' : 'hover:bg-slate-50 text-slate-600'}`}
+              >
                 {ch.title}
               </button>
             ))}
           </div>
-          <div className="flex-1 p-8 overflow-y-auto">
-            <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl border shadow-sm">
-              <h1 className="text-2xl font-bold mb-6 border-b pb-4">{activeContent?.title}</h1>
+          <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+            <div className="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl border shadow-sm">
+              <h1 className="text-xl md:text-2xl font-bold mb-6 border-b pb-4 text-slate-900">{activeContent?.title}</h1>
               {activeContent?.content}
             </div>
           </div>
@@ -756,7 +899,7 @@
       );
     }
 
-    // --- DICTIONARY VIEW ---
+    // --- SLOVNÍČEK VIEW ---
     function DictionaryView({ category, setCategory, search, setSearch }) {
       const categories = ['Vše', ...new Set(vocabDatabase.map(v => v.cat))];
       const filtered = vocabDatabase.filter(v => {
@@ -766,22 +909,35 @@
       });
 
       return (
-        <div className="p-8 max-w-5xl mx-auto space-y-6">
-          <div className="flex justify-between items-center gap-4">
-            <h2 className="text-3xl font-bold">Slovníček ({filtered.length})</h2>
-            <div className="flex gap-3">
-              <input type="text" placeholder="Hledat..." value={search} onChange={e => setSearch(e.target.value)} className="p-2 border rounded-lg" />
-              <select value={category} onChange={e => setCategory(e.target.value)} className="p-2 border rounded-lg">
+        <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-4 md:space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Slovník</h2>
+              <p className="text-xs md:text-sm text-slate-500">Nalezeno {filtered.length} výrazů</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <input 
+                type="text" 
+                placeholder="Hledat..." 
+                value={search} 
+                onChange={e => setSearch(e.target.value)} 
+                className="p-2.5 bg-white border border-slate-300 rounded-xl text-sm outline-none focus:border-teal-500" 
+              />
+              <select 
+                value={category} 
+                onChange={e => setCategory(e.target.value)} 
+                className="p-2.5 bg-white border border-slate-300 rounded-xl text-sm outline-none focus:border-teal-500"
+              >
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
-          <div className="bg-white rounded-xl border overflow-hidden shadow-sm">
-            <table className="w-full text-left border-collapse">
-              <thead><tr className="bg-slate-100 border-b"><th className="p-4">Latina</th><th className="p-4">Česky</th><th className="p-4">Lekce</th></tr></thead>
-              <tbody className="divide-y">
+          <div className="bg-white rounded-2xl border overflow-x-auto shadow-sm">
+            <table className="w-full text-left border-collapse min-w-[500px]">
+              <thead><tr className="bg-slate-100 text-xs text-slate-500 uppercase border-b"><th className="p-4">Latina</th><th className="p-4">Česky</th><th className="p-4">Lekce</th></tr></thead>
+              <tbody className="divide-y text-sm">
                 {filtered.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50"><td className="p-4 font-semibold">{item.latin}</td><td className="p-4 text-teal-700">{item.czech}</td><td className="p-4 text-xs text-slate-500">{item.cat}</td></tr>
+                  <tr key={idx} className="hover:bg-slate-50"><td className="p-4 font-semibold text-slate-900">{item.latin}</td><td className="p-4 text-teal-700">{item.czech}</td><td className="p-4 text-xs text-slate-400">{item.cat}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -790,34 +946,59 @@
       );
     }
 
-    // --- SOURCES VIEW ---
+    // --- ZDROJE A LITERATURA VIEW ---
     function SourcesView() {
       return (
-        <div className="p-8 max-w-3xl mx-auto space-y-6">
-          <h2 className="text-3xl font-bold">Zdroje a Literatura</h2>
-          <div className="bg-white p-8 rounded-xl border space-y-4">
-            <h3 className="font-bold text-lg text-teal-800">Úvod do latinské terminologie</h3>
-            <p><strong>Autorka:</strong> PhDr. Vlasta Seinerová</p>
-            <p><strong>Vydavatel:</strong> Univerzita Pardubice, Fakulta zdravotnických studií</p>
-            <p><strong>ISBN:</strong> 978-80-7560-589-4</p>
+        <div className="p-4 md:p-8 max-w-3xl mx-auto space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Zdroje a Literatura</h2>
+          
+          <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Hlavní studijní materiál</h3>
+              <p className="font-semibold text-teal-800 text-base">Úvod do latinské terminologie</p>
+              <p className="text-sm text-slate-600 mt-1"><strong>Autorka:</strong> PhDr. Vlasta Seinerová</p>
+              <p className="text-sm text-slate-600"><strong>Vydavatel:</strong> Univerzita Pardubice, Fakulta zdravotnických studií</p>
+              <p className="text-sm text-slate-600"><strong>ISBN:</strong> 978-80-7560-589-4 (PDF)</p>
+            </div>
+
+            <hr className="border-slate-200"/>
+
+            <div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Recenzenti publikace</h3>
+              <ul className="list-disc pl-5 text-sm space-y-1 text-slate-600">
+                <li>prof. MUDr. Arnošt Pellant, DrSc.</li>
+                <li>Mgr. Hana Stoklasová, Ph.D.</li>
+              </ul>
+            </div>
+
+            <hr className="border-slate-200"/>
+
+            <div>
+              <h3 className="text-base font-bold text-slate-900 mb-2">Další doporučená literatura</h3>
+              <ul className="list-disc pl-5 text-sm space-y-1 text-slate-600">
+                <li>KÁBRT, J., VALACH, V. <em>Stručný lékařský slovník.</em> Praha: Avicenum, 1979.</li>
+                <li>KÁBRT, J. <em>Jazyk latinský I. Učebnice pro střední zdravotnické školy.</em> Praha: Informatorium, 1995.</li>
+                <li>NEČAS, P., SCHÁNĚLOVÁ E., ČEBIŠOVÁ K. <em>Latinská lékařská terminologie.</em> Praha: Karolinum, 2016.</li>
+              </ul>
+            </div>
           </div>
         </div>
       );
     }
 
-    // --- PRACTICE VIEW ---
+    // --- CVIČENÍ / PRACTICE VIEW ---
     function PracticeView({ mode, setMode, category, setCategory, knownWords, updateKnownWords }) {
       const categories = ['Vše', ...new Set(vocabDatabase.map(v => v.cat))];
       const activeVocab = getVocabByCategory(category);
 
       return (
-        <div className="p-8 flex flex-col items-center">
-          <div className="flex justify-between w-full max-w-xl mb-8 bg-white p-2 rounded-xl border">
-            <div className="space-x-2">
-              <button onClick={() => setMode('flashcards')} className={`px-4 py-2 rounded-lg font-medium ${mode === 'flashcards' ? 'bg-teal-600 text-white' : 'bg-slate-100'}`}>Kartičky</button>
-              <button onClick={() => setMode('quiz')} className={`px-4 py-2 rounded-lg font-medium ${mode === 'quiz' ? 'bg-teal-600 text-white' : 'bg-slate-100'}`}>Kvíz</button>
+        <div className="p-4 md:p-8 flex flex-col items-center">
+          <div className="flex flex-col sm:flex-row justify-between w-full max-w-lg mb-6 bg-white p-2 rounded-2xl border gap-2">
+            <div className="flex space-x-1">
+              <button onClick={() => setMode('flashcards')} className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-sm font-medium ${mode === 'flashcards' ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'}`}>Kartičky</button>
+              <button onClick={() => setMode('quiz')} className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-sm font-medium ${mode === 'quiz' ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'}`}>Kvíz</button>
             </div>
-            <select value={category} onChange={e => setCategory(e.target.value)} className="p-2 border rounded-lg text-sm">
+            <select value={category} onChange={e => setCategory(e.target.value)} className="p-2 bg-slate-50 border rounded-xl text-xs sm:text-sm outline-none">
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
@@ -836,43 +1017,50 @@
       const [idx, setIdx] = useState(0);
       const [flipped, setFlipped] = useState(false);
 
-      if (!vocab || vocab.length === 0) return <div>Žádná slovíčka v této lekci.</div>;
+      if (!vocab || vocab.length === 0) return <div className="p-8 text-center text-slate-500">Žádná slovíčka v této lekci.</div>;
       const w = vocab[idx % vocab.length];
 
       return (
         <div className="max-w-lg w-full flex flex-col items-center">
-          <div className="w-full flex justify-between text-sm text-slate-400 mb-4">
+          <div className="w-full flex justify-between text-xs sm:text-sm text-slate-400 mb-4 px-2">
             <span>Kartička {idx + 1} z {vocab.length}</span>
             <span>{knownWords[w.latin] ? '✓ Znám' : 'Neprohlédnuto'}</span>
           </div>
 
-          <div className="w-full aspect-[3/2] perspective-1000 mb-8 cursor-pointer" onClick={() => setFlipped(!flipped)}>
+          <div className="w-full aspect-[3/2] perspective-1000 mb-6 cursor-pointer" onClick={() => setFlipped(!flipped)}>
             <div className={`relative w-full h-full transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
-              <div className="absolute inset-0 w-full h-full backface-hidden bg-white border-2 rounded-3xl shadow-lg flex flex-col justify-center items-center p-8">
-                <span className="text-xs font-bold text-slate-400 uppercase mb-4">LATINSKY</span>
-                <h2 className="text-3xl font-extrabold text-slate-800 text-center">{w.latin}</h2>
+              <div className="absolute inset-0 w-full h-full backface-hidden bg-white border-2 border-slate-200 rounded-3xl shadow-lg flex flex-col justify-center items-center p-6">
+                <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">LATINSKY</span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 text-center">{w.latin}</h2>
+                <span className="text-xs text-slate-400 mt-6 flex items-center gap-1"><RotateCcw className="w-3.5 h-3.5"/> Kliknutím otoč</span>
               </div>
-              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-teal-900 border-2 rounded-3xl shadow-lg flex flex-col justify-center items-center p-8 text-white">
-                <span className="text-xs font-bold text-teal-300 uppercase mb-4">ČESKY</span>
-                <h2 className="text-3xl font-extrabold text-center">{w.czech}</h2>
+              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-teal-900 border-2 border-teal-800 rounded-3xl shadow-lg flex flex-col justify-center items-center p-6 text-white">
+                <span className="text-[10px] sm:text-xs font-bold text-teal-300 uppercase tracking-widest mb-4">ČESKY</span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-center">{w.czech}</h2>
+                <span className="text-xs text-teal-300 mt-6 flex items-center gap-1"><RotateCcw className="w-3.5 h-3.5"/> Kliknutím otoč zpět</span>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-4 w-full">
-            <button onClick={() => { updateKnownWords(w.latin, false); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-4 bg-rose-100 text-rose-700 font-bold rounded-xl hover:bg-rose-200">Neznám</button>
-            <button onClick={() => { updateKnownWords(w.latin, true); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-4 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200">Znám</button>
+          <div className="flex gap-3 w-full">
+            <button onClick={() => { updateKnownWords(w.latin, false); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-3.5 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-2xl hover:bg-rose-100 flex justify-center items-center gap-1 text-sm">
+              <XCircle className="w-4 h-4" /> Neznám
+            </button>
+            <button onClick={() => { updateKnownWords(w.latin, true); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-3.5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold rounded-2xl hover:bg-emerald-100 flex justify-center items-center gap-1 text-sm">
+              <CheckCircle2 className="w-4 h-4" /> Znám
+            </button>
           </div>
         </div>
       );
     }
 
-    // --- QUIZ MODULE ---
+    // --- QUIZ MODULE SE ZPĚTNOU VAZBOU ---
     function QuizModule({ vocab, allVocab }) {
       const [started, setStarted] = useState(false);
       const [questions, setQuestions] = useState([]);
       const [qIdx, setQIdx] = useState(0);
       const [score, setScore] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
 
       const startQuiz = () => {
         const limit = Math.min(10, vocab.length);
@@ -885,20 +1073,76 @@
         setQuestions(generated);
         setQIdx(0);
         setScore(0);
+        setSelectedAnswer(null);
         setStarted(true);
       };
 
-      if (!started) return <button onClick={startQuiz} className="px-8 py-4 bg-teal-600 text-white font-bold rounded-xl shadow-md">Spustit Kvíz (10 otázek)</button>;
-      if (qIdx >= questions.length) return <div className="text-center"><h2 className="text-3xl font-bold mb-4">Konec kvízu!</h2><p className="text-xl mb-6">Skóre: {score} z {questions.length}</p><button onClick={startQuiz} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl">Hrát znovu</button></div>;
+      const handleSelectOption = (opt) => {
+        if (selectedAnswer !== null) return;
+        setSelectedAnswer(opt);
+        if (opt === questions[qIdx].correctAnswer) {
+          setScore(s => s + 1);
+        }
+        setTimeout(() => {
+          setQIdx(prev => prev + 1);
+          setSelectedAnswer(null);
+        }, 1200);
+      };
+
+      if (!started) return (
+        <div className="text-center p-8 bg-white rounded-2xl border max-w-md w-full">
+          <CheckSquare className="w-12 h-12 text-teal-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-slate-900 mb-2">Zkušební kvíz</h3>
+          <p className="text-slate-500 text-sm mb-6">Test obsahuje 10 náhodných slovíček z vybraného okruhu.</p>
+          <button onClick={startQuiz} className="w-full py-3.5 bg-teal-600 text-white font-bold rounded-xl shadow-md hover:bg-teal-700">Spustit cvičení</button>
+        </div>
+      );
+
+      if (qIdx >= questions.length) return (
+        <div className="text-center p-8 bg-white rounded-2xl border max-w-md w-full">
+          <Trophy className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-2">Cvičení dokončeno!</h2>
+          <p className="text-lg text-slate-600 mb-6">Váš výsledek: <span className="font-bold text-slate-900">{score} z {questions.length}</span></p>
+          <button onClick={startQuiz} className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800">Spustit nový kvíz</button>
+        </div>
+      );
 
       const q = questions[qIdx];
       return (
-        <div className="max-w-md w-full text-center space-y-6">
-          <h3 className="text-2xl font-bold">Přeložte: {q.question}</h3>
-          <div className="grid grid-cols-1 gap-3">
-            {q.options.map((opt, i) => (
-              <button key={i} onClick={() => { if(opt === q.correctAnswer) setScore(s=>s+1); setQIdx(qIdx+1); }} className="p-4 bg-white border-2 rounded-xl text-left font-medium hover:border-teal-500">{opt}</button>
-            ))}
+        <div className="max-w-md w-full space-y-4">
+          <div className="flex justify-between text-xs font-bold text-slate-400 uppercase">
+            <span>Otázka {qIdx + 1} / {questions.length}</span>
+            <span>Skóre: {score}</span>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border shadow-sm text-center">
+            <span className="text-xs text-teal-600 font-semibold mb-1 block">Přeložte z latiny do češtiny:</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{q.question}</h2>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5">
+            {q.options.map((opt, i) => {
+              let btnClass = "bg-white border-2 border-slate-200 text-slate-700 hover:border-teal-400";
+              if (selectedAnswer !== null) {
+                if (opt === q.correctAnswer) {
+                  btnClass = "bg-emerald-50 border-2 border-emerald-500 text-emerald-800 font-bold shadow-md";
+                } else if (opt === selectedAnswer) {
+                  btnClass = "bg-rose-50 border-2 border-rose-500 text-rose-800 font-bold shadow-md";
+                } else {
+                  btnClass = "bg-white border-2 border-slate-100 text-slate-300 opacity-40";
+                }
+              }
+              return (
+                <button 
+                  key={i} 
+                  onClick={() => handleSelectOption(opt)} 
+                  disabled={selectedAnswer !== null} 
+                  className={`p-4 rounded-xl text-base text-left font-medium transition-all ${btnClass}`}
+                >
+                  {opt}
+                </button>
+              );
+            })}
           </div>
         </div>
       );
