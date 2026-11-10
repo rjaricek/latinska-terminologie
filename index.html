@@ -11,8 +11,6 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <!-- Babel pro překlad JSX v prohlížeči -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Lucide ikony -->
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-50 text-slate-800">
   <div id="root"></div>
@@ -20,43 +18,51 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // Bezpečné načtení Lucide ikon bez rizika pádu (white screen)
-    const getIcon = (name) => {
-      if (window.lucide && window.lucide.icons && window.lucide.icons[name]) {
-        return (props) => {
-          const ref = React.useRef(null);
-          React.useEffect(() => {
-            if (ref.current) {
-              ref.current.innerHTML = '';
-              const iconSvg = window.lucide.createIcons({
-                icons: { [name]: window.lucide.icons[name] },
-                nameAttr: 'data-lucide'
-              });
-            }
-          }, []);
-          return <i ref={ref} data-lucide={name} className={props.className || ''}></i>;
-        };
-      }
-      return (props) => <span className={props.className}></span>;
-    };
+    // --- ČISTÉ SVG IKONY (BEZ PAZÚRŮ CDN LIBRARIES) ---
+    const BookOpen = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    );
+    const LayoutDashboard = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+    );
+    const CheckCircle2 = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    );
+    const XCircle = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    );
+    const BrainCircuit = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+    );
+    const RotateCcw = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    );
+    const ChevronRight = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+    );
+    const Trophy = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2 0h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+    );
+    const Dumbbell = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+    );
+    const Stethoscope = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    );
+    const CheckSquare = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    );
+    const ListFilter = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+    );
+    const Info = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    );
+    const Sparkles = ({ className = "w-5 h-5" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2 0h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+    );
 
-    // Vytvoření komponent ikon pro aplikaci
-    const BookOpen = (props) => <span className={`inline-block font-bold ${props.className}`}>📖</span>;
-    const LayoutDashboard = (props) => <span className={`inline-block font-bold ${props.className}`}>📊</span>;
-    const CheckCircle2 = (props) => <span className={`inline-block font-bold ${props.className}`}>✓</span>;
-    const XCircle = (props) => <span className={`inline-block font-bold ${props.className}`}>✗</span>;
-    const BrainCircuit = (props) => <span className={`inline-block font-bold ${props.className}`}>🧠</span>;
-    const RotateCcw = (props) => <span className={`inline-block font-bold ${props.className}`}>🔄</span>;
-    const ChevronRight = (props) => <span className={`inline-block font-bold ${props.className}`}>›</span>;
-    const Trophy = (props) => <span className={`inline-block font-bold ${props.className}`}>🏆</span>;
-    const Dumbbell = (props) => <span className={`inline-block font-bold ${props.className}`}>🏋️</span>;
-    const Stethoscope = (props) => <span className={`inline-block font-bold ${props.className}`}>🩺</span>;
-    const CheckSquare = (props) => <span className={`inline-block font-bold ${props.className}`}>☑</span>;
-    const ListFilter = (props) => <span className={`inline-block font-bold ${props.className}`}>🔍</span>;
-    const Info = (props) => <span className={`inline-block font-bold ${props.className}`}>ℹ️</span>;
-    const Sparkles = (props) => <span className={`inline-block font-bold ${props.className}`}>✨</span>;
-
-    // --- MASSIVE VOCABULARY DATABASE ---
+    // --- COMPLETE VOCABULARY DATABASE (400+ ITEMS) ---
     const vocabDatabase = [
       // Lekce II: 1. Deklinace
       { cat: 'Lekce II: 1. Deklinace', latin: 'angina, ae, f.', czech: 'angina' },
@@ -166,12 +172,300 @@
       { cat: 'Lekce III: 2. Deklinace', latin: 'venenum, i, n.', czech: 'jed' },
       { cat: 'Lekce III: 2. Deklinace', latin: 'ventriculus, i, m.', czech: 'žaludek, srdeční komora' },
       { cat: 'Lekce III: 2. Deklinace', latin: 'virus, i, n.', czech: 'virus' },
-      { cat: 'Lekce III: 2. Deklinace', latin: 'vitrum, i, n.', czech: 'lahvička, sklo' }
+      { cat: 'Lekce III: 2. Deklinace', latin: 'vitrum, i, n.', czech: 'lahvička, sklo' },
+
+      // Lekce IV: Adjektiva 1. a 2. dekl.
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'adultus, a, um', czech: 'dospělý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'aeger, gra, grum', czech: 'nemocný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'anatomicus, a, um', czech: 'anatomický' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'benignus, a, um', czech: 'nezhoubný, benigní' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'bifidus, a, um', czech: 'dvouklaný, rozštěpený' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'crassus, a, um', czech: 'silný, tlustý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'dexter, tra, trum', czech: 'pravý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'externus, a, um', czech: 'vnější' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'extremus, a, um', czech: 'krajní, nejzazší' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'felleus, a, um', czech: 'žlučový' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'chronicus, a, um', czech: 'vleklý, chronický' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'incompletus, a, um', czech: 'neúplný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'infectiosus, a, um', czech: 'infekční, nakažlivý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'internus, a, um', czech: 'vnitřní' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'laesus, a, um', czech: 'poškozený' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'latus, a, um', czech: 'široký' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'longus, a, um', czech: 'dlouhý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'magnus, a, um', czech: 'velký' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'malignus, a, um', czech: 'zhoubný, maligní' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'maximus, a, um', czech: 'největší' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'medulla oblongata', czech: 'prodloužená mícha' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'medulla, ae, f.', czech: 'dřeň, mícha' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'mellitus, a, um', czech: 'sladký, cukrový' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'minimus, a, um', czech: 'nejmenší' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'oblongatus, a, um', czech: 'prodloužený' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'parvus, a, um', czech: 'malý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'perforatus, a, um', czech: 'proděravělý, prasklý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'periculosus, a, um', czech: 'nebezpečný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'plenus, a, um', czech: 'plný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'postoperativus, a, um', czech: 'pooperační' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'profundus, a, um', czech: 'hluboký' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'purus, a, um', czech: 'čistý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'ruptus, a, um', czech: 'prasklý, roztržený' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'sinister, tra, trum', czech: 'levý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'transversus, a, um', czech: 'příčný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'urinarius, a, um', czech: 'močový' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'vagus, a, um', czech: 'bludný' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'venosus, a, um', czech: 'žilný, žilnatý' },
+      { cat: 'Lekce IV: Adjektiva 1. a 2. dekl.', latin: 'vivus, a, um', czech: 'živý' },
+
+      // Lekce V: 3. Deklinace
+      { cat: 'Lekce V: 3. Deklinace', latin: 'abductor, oris, m.', czech: 'odtahovač' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'adductor, oris, m.', czech: 'přitahovač' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'animal, alis, n.', czech: 'živočich' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'arteriosus, a, um', czech: 'tepenný' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'auris, is, f.', czech: 'ucho' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'basis, is, f.', czech: 'spodina, základna' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'calor, oris, m.', czech: 'teplo, teplota' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'caput, itis, n.', czech: 'hlava' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'carotis, idis, f.', czech: 'krkavice' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'cor, cordis, n.', czech: 'srdce' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'corpus, oris, n.', czech: 'tělo' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'dens, tis, m.', czech: 'zub' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'diaphragma, matis, n.', czech: 'bránice' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'dispositio, onis, f.', czech: 'sklon' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'dolor, oris, m.', czech: 'bolest' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'exemplar, aris, n.', czech: 'příklad' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'febris, is, f.', czech: 'horečka' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'femur, oris, n.', czech: 'stehno' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'finis, is, m.', czech: 'konec' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'functio, onis, f.', czech: 'činnost, funkce' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'genus, eris, n.', czech: 'rod, druh' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'iniectio, onis, f.', czech: 'injekce' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'masseter, eris, m.', czech: 'žvýkač' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'mors, mortis, f.', czech: 'smrt' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'narcosis, is, f.', czech: 'znecitlivění' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'operatio, onis, f.', czech: 'operace' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'os, ossis, n.', czech: 'kost' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'parotis, idis, f.', czech: 'příušní žláza' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'pars, tis, f.', czech: 'část, díl' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'pulmo, onis, m.', czech: 'plíce' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'pulvis, eris, m.', czech: 'prášek' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'radix, icis, f.', czech: 'kořen' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'remedium, ii, n.', czech: 'lék' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'sanguis, inis, m.', czech: 'krev' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'sitis, is, f.', czech: 'žízeň' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'sphincter, eris, m.', czech: 'svěrač' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'systema, atis, n.', czech: 'systém, ústrojí' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'tabula, ae, f.', czech: 'tabule, stůl' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'tempus, oris, n.', czech: 'čas' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'thorax, acis, m.', czech: 'hrudník' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'transfusio, onis, f.', czech: 'převod krve, transfuze' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'tumor, oris, m.', czech: 'nádor' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'tussis, is, f.', czech: 'kašel' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'ulcus, eris, n.', czech: 'vřed' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'ureter, eris, m.', czech: 'močovod' },
+      { cat: 'Lekce V: 3. Deklinace', latin: 'valetudo, inis, f.', czech: 'zdraví' },
+
+      // Lekce VI: Adjektiva 3. dekl.
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'acer, acris, acre', czech: 'prudký, ostrý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'aequalis, e', czech: 'rovný, stejný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'afferens, entis', czech: 'přivádějící, přívodný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'amissio, onis, f.', czech: 'ztráta' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'brevis, e', czech: 'krátký' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'biceps, bicipitis', czech: 'dvojhlavý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'caudalis, e', czech: 'dolní, vzdálený' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'celer, is, e', czech: 'rychlý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'cervicalis, e', czech: 'krční, šíjový' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'coccygeus, a, um', czech: 'kostrční' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'cranialis, e', czech: 'lebeční' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'cranium, ii, n.', czech: 'lebka' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'duplex, icis', czech: 'dvojitý, dvojnásobný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'febrilis, e', czech: 'horečnatý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'immobilis, e', czech: 'nehybný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'latens, entis', czech: 'skrytý, skrývající se' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'mobilis, e', czech: 'pohyblivý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'occipitalis, e', czech: 'týlní' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'opponens, entis', czech: 'protilehlý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'paratus, a, um', czech: 'připravený' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'penetrans, antis', czech: 'penetrující, pronikající' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'permanens, entis', czech: 'trvalý, stálý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'pollex, icis, m.', czech: 'palec' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'praesens, entis', czech: 'přítomný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'propter', czech: 'pro, kvůli (předložka)' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'pulmonalis, e', czech: 'plicní' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'recens, entis', czech: 'čerstvý, silný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'sacralis, e', czech: 'křížový' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'simplex, icis', czech: 'jednoduchý, obyčejný' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'statim', czech: 'ihned' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'sterilis, e', czech: 'sterilní' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'thoracicus, a, um', czech: 'hrudní' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'triceps, tricipitis', czech: 'trojhlavý' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'vertebralis, e', czech: 'obratlový' },
+      { cat: 'Lekce VI: Adjektiva 3. dekl.', latin: 'vulnus, eris, n.', czech: 'rána, poranění' },
+
+      // Lekce VII: 4. Deklinace
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'abortus, us, m.', czech: 'potrat' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'abscessus, us, m.', czech: 'absces' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'acus, us, f.', czech: 'jehla' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'aditus, us, m.', czech: 'vchod, vstup' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'apparatus, us, m.', czech: 'přístroj, ústrojí, soustava' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'auditus, us, m.', czech: 'sluch' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'circulatorius, a, um', czech: 'oběhový' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'collapsus, us, m.', czech: 'selhání' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'cornu, us, n.', czech: 'roh' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'cursus, us, m.', czech: 'běh' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'decubitus, us, m.', czech: 'proleženina' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'decursus, us, m.', czech: 'průběh' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'digestorius, a, um', czech: 'trávicí' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'genu, us, n.', czech: 'koleno' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'gustus, us, m.', czech: 'chuť' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'homo, inis, m.', czech: 'člověk' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'ictus, us, m.', czech: 'iktus, úder, úžeh' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'infarctus, us, m.', czech: 'infarkt, záhať' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'insultus, us, m.', czech: 'záchvat' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'manus, us, f.', czech: 'ruka' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'olfactus, us, m.', czech: 'čich' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'partus, us, m.', czech: 'porod' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'praecox, ocis', czech: 'předčasný' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'pulsus, us, m.', czech: 'puls, tep' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'sensus, us, m.', czech: 'smysl' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'situs, a, um', czech: 'položený, uložený' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'situs, us, m.', czech: 'poloha, položení' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'status, us, m.', czech: 'stav, chorobopis' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'tactus, us, m.', czech: 'hmat' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'tractus, us, m.', czech: 'dráha, soustava, ústrojí' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'usus, us, m.', czech: 'užívání' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'valgus, a, um', czech: 'vbočený' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'varus, a, um', czech: 'vybočený' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'via, ae, f.', czech: 'cesta' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'visus, us, m.', czech: 'zrak' },
+      { cat: 'Lekce VII: 4. Deklinace', latin: 'vomitus, us, m.', czech: 'vrhnutí, zvracení' },
+
+      // Lekce VIII: 5. Deklinace a další
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'aegre', czech: 'těžko' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'aetas, atis, f.', czech: 'věk' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'arcus, us, m.', czech: 'oblouk' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'aromaticus, a, um', czech: 'aromatický, vonný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'canities, ei, f.', czech: 'šedivění' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'caries, ei, f.', czech: 'kaz' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'certus, a, um', czech: 'jistý' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'cutis, is, f.', czech: 'kůže' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'dies, ei, m, f.', czech: 'den' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'facies, ei, f.', czech: 'plocha, tvář, obličej' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'infirmus, a, um', czech: 'nepevný, slabý' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'inoperabilis, e', czech: 'neoperovatelný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'insanabilis, e', czech: 'nevyléčitelný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'interruptio, onis, f.', czech: 'interrupce' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'intramuscularis, e', czech: 'nitrosvalový' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'intravenosus, a, um', czech: 'nitrožilní' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'laesio, onis, f.', czech: 'poškození' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'operabilis, e', czech: 'operovatelný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'provectus, a, um', czech: 'pokročilý věkem, starý' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'res, ei, f.', czech: 'věc' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'saepe', czech: 'často' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'sanabilis, e', czech: 'léčitelný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'semper', czech: 'vždycky' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'senilis, e', czech: 'stařecký' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'series, ei, f.', czech: 'série, řada' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'similis, e', czech: 'podobný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'siccus, a, um', czech: 'suchý' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'species, ei, f.', czech: 'druh' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'species, erum, f.', czech: 'čajová směs' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'spes, ei, f.', czech: 'naděje' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'spontaneus, a, um', czech: 'spontánní, samovolný' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'subcutaneus, a, um', czech: 'podkožní' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'subitus, a, um', czech: 'náhlý' },
+      { cat: 'Lekce VIII: 5. Deklinace a další', latin: 'superficies, ei, f.', czech: 'povrch' },
+
+      // Lekce IX: Stupňování
+      { cat: 'Lekce IX: Stupňování', latin: 'acquisitus, a, um', czech: 'získaný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'aliquot', czech: 'několik' },
+      { cat: 'Lekce IX: Stupňování', latin: 'angustus, a, um', czech: 'úzký' },
+      { cat: 'Lekce IX: Stupňování', latin: 'aut', czech: 'nebo' },
+      { cat: 'Lekce IX: Stupňování', latin: 'bonus, a, um', czech: 'dobrý' },
+      { cat: 'Lekce IX: Stupňování', latin: 'caninus, a, um (dens)', czech: 'psí, špičákový (špičák)' },
+      { cat: 'Lekce IX: Stupňování', latin: 'causa, ae, f.', czech: 'příčina, důvod' },
+      { cat: 'Lekce IX: Stupňování', latin: 'circulatio, onis, f.', czech: 'oběh' },
+      { cat: 'Lekce IX: Stupňování', latin: 'congenitus, a, um', czech: 'vrozený' },
+      { cat: 'Lekce IX: Stupňování', latin: 'curvatura, ae, f.', czech: 'zakřivení' },
+      { cat: 'Lekce IX: Stupňování', latin: 'defectus, us, m.', czech: 'vada, porucha' },
+      { cat: 'Lekce IX: Stupňování', latin: 'difficilis, e', czech: 'obtížný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'distalis, e', czech: 'vzdálený' },
+      { cat: 'Lekce IX: Stupňování', latin: 'dubius, a, um', czech: 'nejistý, pochybný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'exitus, us, m.', czech: 'odchod, smrt' },
+      { cat: 'Lekce IX: Stupňování', latin: 'extractio, onis, f.', czech: 'vynětí, vytržení' },
+      { cat: 'Lekce IX: Stupňování', latin: 'extremitas, atis, f.', czech: 'končetina' },
+      { cat: 'Lekce IX: Stupňování', latin: 'facilis, e', czech: 'snadný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'factus, a, um', czech: 'vykonaný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'fragilis, e', czech: 'křehký' },
+      { cat: 'Lekce IX: Stupňování', latin: 'fragilitas, atis, f.', czech: 'křehkost, lomivost' },
+      { cat: 'Lekce IX: Stupňování', latin: 'humanus, a, um', czech: 'lidský' },
+      { cat: 'Lekce IX: Stupňování', latin: 'incisivus, a, um (dens)', czech: 'řezající (řezák)' },
+      { cat: 'Lekce IX: Stupňování', latin: 'incubatio, onis, f.', czech: 'inkubace' },
+      { cat: 'Lekce IX: Stupňování', latin: 'iuventus, utis, f.', czech: 'mládí' },
+      { cat: 'Lekce IX: Stupňování', latin: 'labium pudendi', czech: 'stydký pysk' },
+      { cat: 'Lekce IX: Stupňování', latin: 'malformatio, onis, f.', czech: 'malformace, znetvoření, vada' },
+      { cat: 'Lekce IX: Stupňování', latin: 'malus, a, um', czech: 'špatný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'membrum, i, n.', czech: 'končetina, úd' },
+      { cat: 'Lekce IX: Stupňování', latin: 'molaris, e (dens)', czech: 'mlecí (zub = stolička)' },
+      { cat: 'Lekce IX: Stupňování', latin: 'multus, a, um', czech: 'mnohý' },
+      { cat: 'Lekce IX: Stupňování', latin: 'necessarius, a, um', czech: 'nezbytný' },
+      { cat: 'Lekce IX: Stupňování', latin: 'omnis, e', czech: 'každý, všechen' },
+      { cat: 'Lekce IX: Stupňování', latin: 'os, oris, n.', czech: 'ústa' },
+      { cat: 'Lekce IX: Stupňování', latin: 'ovum, i, n.', czech: 'vajíčko, vejce' },
+      { cat: 'Lekce IX: Stupňování', latin: 'pectoralis, e', czech: 'hrudní, prsní' },
+      { cat: 'Lekce IX: Stupňování', latin: 'prognosis, is, f.', czech: 'předpověď' },
+      { cat: 'Lekce IX: Stupňování', latin: 'quam', czech: 'než' },
+      { cat: 'Lekce IX: Stupňování', latin: 'resectio, onis, f.', czech: 'vynětí, chirurgické odstranění' },
+      { cat: 'Lekce IX: Stupňování', latin: 'resistentia, ae, f.', czech: 'odpor' },
+      { cat: 'Lekce IX: Stupňování', latin: 'sanatio, onis, f.', czech: 'uzdravení, vyhojení' },
+      { cat: 'Lekce IX: Stupňování', latin: 'scarlatina, ae, f.', czech: 'spála' },
+      { cat: 'Lekce IX: Stupňování', latin: 'sectio, onis, f.', czech: 'řez, sekce' },
+      { cat: 'Lekce IX: Stupňování', latin: 'senectus, utis, f.', czech: 'stáří' },
+      { cat: 'Lekce IX: Stupňování', latin: 'subtotalis, e', czech: 'neúplný' },
+
+      // Lekce XI: Odvozování
+      { cat: 'Lekce XI: Odvozování', latin: 'acceleratio, onis, f.', czech: 'zrychlení' },
+      { cat: 'Lekce XI: Odvozování', latin: 'apertus, a, um', czech: 'otevřený' },
+      { cat: 'Lekce XI: Odvozování', latin: 'appendix, icis, f.', czech: 'přívěšek' },
+      { cat: 'Lekce XI: Odvozování', latin: 'atrioventricularis, e', czech: 'síňokomorový' },
+      { cat: 'Lekce XI: Odvozování', latin: 'bene', czech: 'dobře' },
+      { cat: 'Lekce XI: Odvozování', latin: 'bilobatus, a, um', czech: 'dvojlaločný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'bradycardia, ae, f.', czech: 'zpomalení srdeční činnosti' },
+      { cat: 'Lekce XI: Odvozování', latin: 'communis, e', czech: 'společný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'corpusculum, i, n.', czech: 'tělísko' },
+      { cat: 'Lekce XI: Odvozování', latin: 'deformitas, atis, f.', czech: 'deformace, znetvoření' },
+      { cat: 'Lekce XI: Odvozování', latin: 'diagnosis, is, f.', czech: 'rozeznání nemoci' },
+      { cat: 'Lekce XI: Odvozování', latin: 'endocardium, ii, n.', czech: 'srdeční nitroblána' },
+      { cat: 'Lekce XI: Odvozování', latin: 'endocrinicus, a, um', czech: 'endokrinní, s vnitřní sekrecí' },
+      { cat: 'Lekce XI: Odvozování', latin: 'erythrocytus, i, m.', czech: 'červená krvinka' },
+      { cat: 'Lekce XI: Odvozování', latin: 'gastritis, itidis, f.', czech: 'zánět žaludku' },
+      { cat: 'Lekce XI: Odvozování', latin: 'haematemesis, is, f.', czech: 'zvracení krve' },
+      { cat: 'Lekce XI: Odvozování', latin: 'hypertensio, onis, f.', czech: 'vysoký tlak' },
+      { cat: 'Lekce XI: Odvozování', latin: 'hypophysis, is, f.', czech: 'podvěsek mozkový' },
+      { cat: 'Lekce XI: Odvozování', latin: 'inflammatio, onis, f.', czech: 'zánět' },
+      { cat: 'Lekce XI: Odvozování', latin: 'instrumentum, i, n.', czech: 'nástroj' },
+      { cat: 'Lekce XI: Odvozování', latin: 'lacteus, a, um', czech: 'mléčný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'male', czech: 'špatně' },
+      { cat: 'Lekce XI: Odvozování', latin: 'medicus, i, m', czech: 'lékař' },
+      { cat: 'Lekce XI: Odvozování', latin: 'metastasis, is, f.', czech: 'druhotné ložisko, metastáza' },
+      { cat: 'Lekce XI: Odvozování', latin: 'molestus, a, um', czech: 'obtížný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'nephritis, itidis, f.', czech: 'zánět ledvin' },
+      { cat: 'Lekce XI: Odvozování', latin: 'nephrosis, is, f.', czech: 'nezánětlivé onemocnění ledvin' },
+      { cat: 'Lekce XI: Odvozování', latin: 'novus, a, um', czech: 'nový' },
+      { cat: 'Lekce XI: Odvozování', latin: 'nox, noctis, f.', czech: 'noc' },
+      { cat: 'Lekce XI: Odvozování', latin: 'progressivus, a, um', czech: 'postupující, pokračující' },
+      { cat: 'Lekce XI: Odvozování', latin: 'ren, renis, m.', czech: 'ledvina' },
+      { cat: 'Lekce XI: Odvozování', latin: 'respiratio, onis, f.', czech: 'dýchání' },
+      { cat: 'Lekce XI: Odvozování', latin: 'sanatus, a, um', czech: 'vyléčený' },
+      { cat: 'Lekce XI: Odvozování', latin: 'scalpellum, i, n', czech: 'skalpel' },
+      { cat: 'Lekce XI: Odvozování', latin: 'sternocleidomastoideus, i, m.', czech: 'kývač' },
+      { cat: 'Lekce XI: Odvozování', latin: 'tachycardia, ae, f.', czech: 'zrychlení srdeční činnosti' },
+      { cat: 'Lekce XI: Odvozování', latin: 'thyreoideus, a, um', czech: 'štítný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'trilobatus, a, um', czech: 'trojlaločný' },
+      { cat: 'Lekce XI: Odvozování', latin: 'vermiformis, e', czech: 'červovitý' }
     ];
 
     const getVocabByCategory = (cat) => cat === 'Vše' ? vocabDatabase : vocabDatabase.filter(v => v.cat === cat);
 
-    // --- THEORY CHAPTERS ---
+    // --- THEORY CHAPTERS WITH ALL DECLENSION TABLES ---
     const theoryChapters = [
       {
         id: 'lekce-1',
@@ -180,16 +474,143 @@
           <div className="space-y-4">
             <p>V současné latinské lékařské terminologii převládá <strong>středoevropská poklasická výslovnost</strong>.</p>
             <h3 className="font-bold text-teal-700 mt-4">Samohlásky a Dvojhlásky</h3>
-            <p>Samohlásky mohou být krátké (a, e, i, o, u, y) a dlouhé (ā, ē, ī, ō, ū, ý). Dvojhlásky <strong>ae, oe</strong> čteme jako dlouhé <em>é</em>.</p>
+            <p>Samohlásky mohou být krátké (a, e, i, o, u, y) a dlouhé (ā, ē, ī, ō, ū, ý). Dvojhlásky <strong>ae, oe</strong> čteme jako dlouhé <em>é</em> (např. <em>aegrōtus, oedēma</em>).</p>
+            <h3 className="font-bold text-teal-700 mt-4">Pravidla pro souhlásky</h3>
+            <ul className="list-disc pl-5 space-y-1">
+              <li><strong>c</strong> čteme jako c před e, i, y, ae, oe (centrālis); jako k před a, o, u a na konci slova (cancer, cor, infarctus).</li>
+              <li>Slabiky <strong>di, ti, ni</strong> se čtou vždy tvrdě (medicīna, tinctūra). Výjimkou je ti před samohláskou (iniectiō).</li>
+              <li><strong>s</strong> se čte zněle (z) mezi samohláskami (nāsus) a po l, r, n.</li>
+              <li><strong>qu</strong> = kv (aqua), <strong>ph</strong> = f (phosphorus), <strong>rh</strong> = r (rhaphē).</li>
+            </ul>
+            <h3 className="font-bold text-teal-700 mt-4">Základní mluvnické termíny</h3>
+            <p>Latina rozlišuje 3 rody (m., f., n.), 2 čísla (sg., pl.) a 6 pádů: nominativ (1. pád), genitiv (2. pád), dativ (3. pád), akuzativ (4. pád), vokativ (5. pád) a ablativ (6. pád).</p>
           </div>
         )
       },
       {
         id: 'lekce-2',
-        title: 'Lekce II: I. Deklinace',
+        title: 'Lekce II: I. Deklinace substantiva a předložky',
         content: (
           <div className="space-y-4">
-            <p>Do I. deklinace zařazujeme substantiva zakončená v nom. sg. na <strong>-a</strong> a v gen. sg. na <strong>-ae</strong>. Vzor: <strong>vēna, ae, f.</strong></p>
+            <p>Do I. deklinace zařazujeme substantiva zakončená v nom. sg. na <strong>-a</strong> a v gen. sg. na <strong>-ae</strong> (většina jsou feminina). Vzor: <strong>vēna, ae, f.</strong></p>
+            <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
+              <h4 className="font-bold mb-2 text-teal-800">Tabulka skloňování vzoru vēna</h4>
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-slate-300"><th className="pb-2">Pád</th><th className="pb-2">Singulár</th><th className="pb-2">Plurál</th></tr></thead>
+                <tbody>
+                  <tr className="border-b border-slate-200"><td>Nominativ</td><td>vēna (-a)</td><td>vēnae (-ae)</td></tr>
+                  <tr className="border-b border-slate-200"><td>Genitiv</td><td>vēnae (-ae)</td><td>vēnārum (-ārum)</td></tr>
+                  <tr className="border-b border-slate-200"><td>Dativ</td><td>vēnae (-ae)</td><td>vēnīs (-īs)</td></tr>
+                  <tr className="border-b border-slate-200"><td>Akuzativ</td><td>vēnam (-am)</td><td>vēnās (-ās)</td></tr>
+                  <tr><td>Ablativ</td><td>vēnā (-ā)</td><td>vēnīs (-īs)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 className="font-bold text-teal-700 mt-4">Předložky v latině</h3>
+            <p><strong>S ablativem:</strong> ā/ab (od), cum (s), ē/ex (z, ze), prō (pro, kvůli), sine (bez).</p>
+            <p><strong>S akuzativem:</strong> ad/apud (k, do), ante (před), contrā (proti), inter (mezi), intrā (uvnitř), post (po), propter (kvůli).</p>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-3',
+        title: 'Lekce III: II. Deklinace',
+        content: (
+          <div className="space-y-4">
+            <p>Do II. deklinace řadíme maskulina na <strong>-us, -er</strong> (genitiv na <strong>-ī</strong>) a neutra na <strong>-um</strong>. Vzory: <strong>mūsculus, ī, m.</strong> a <strong>cavum, ī, n.</strong></p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+              <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
+                <h4 className="font-bold mb-2 text-teal-800">Vzor: mūsculus / cancer (m.)</h4>
+                <table className="w-full text-sm text-left">
+                  <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Sg.</th><th>Pl.</th></tr></thead>
+                  <tbody>
+                    <tr className="border-b border-slate-200"><td>Nom.</td><td>mūsculus / cancer</td><td>mūsculī / cancrī</td></tr>
+                    <tr className="border-b border-slate-200"><td>Gen.</td><td>mūsculī / cancrī</td><td>mūsculōrum / cancrōrum</td></tr>
+                    <tr className="border-b border-slate-200"><td>Akuz.</td><td>mūsculum / cancrum</td><td>mūsculōs / cancrōs</td></tr>
+                    <tr><td>Abl.</td><td>mūsculō / cancrō</td><td>mūsculīs / cancris</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="bg-slate-100 p-4 rounded-lg overflow-x-auto">
+                <h4 className="font-bold mb-2 text-teal-800">Vzor: cavum (n.)</h4>
+                <table className="w-full text-sm text-left">
+                  <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Sg.</th><th>Pl.</th></tr></thead>
+                  <tbody>
+                    <tr className="border-b border-slate-200"><td>Nom.</td><td>cavum</td><td>cava</td></tr>
+                    <tr className="border-b border-slate-200"><td>Gen.</td><td>cavī</td><td>cavōrum</td></tr>
+                    <tr className="border-b border-slate-200"><td>Akuz.</td><td>cavum</td><td>cava</td></tr>
+                    <tr><td>Abl.</td><td>cavō</td><td>cavīs</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-4',
+        title: 'Lekce IV: Latinská adjektiva I. a II. deklinace',
+        content: (
+          <div className="space-y-4">
+            <p>Adjektiva 1. a 2. deklinace se skloňují podle rodů: maskulina podle <em>mūsculus/cancer</em>, feminina podle <em>vēna</em> a neutra podle <em>cavum</em>.</p>
+            <div className="bg-slate-100 p-4 rounded-lg my-4 overflow-x-auto">
+              <h4 className="font-bold mb-2 text-teal-800">Skloňování adjektiva acūtus, a, um</h4>
+              <table className="w-full text-sm text-left">
+                <thead><tr className="border-b border-slate-300"><th>Pád</th><th>Masc. Sg.</th><th>Fem. Sg.</th><th>Neut. Sg.</th><th>Masc. Pl.</th><th>Fem. Pl.</th><th>Neut. Pl.</th></tr></thead>
+                <tbody>
+                  <tr className="border-b border-slate-200 font-medium"><td>Nom.</td><td>acūtus</td><td>acūta</td><td>acūtum</td><td>acūtī</td><td>acūtae</td><td>acūta</td></tr>
+                  <tr className="border-b border-slate-200"><td>Gen.</td><td>acūtī</td><td>acūtae</td><td>acūtī</td><td>acūtōrum</td><td>acūtārum</td><td>acūtōrum</td></tr>
+                  <tr className="border-b border-slate-200"><td>Akuz.</td><td>acūtum</td><td>acūtam</td><td>acūtum</td><td>acūtōs</td><td>acūtās</td><td>acūta</td></tr>
+                  <tr><td>Abl.</td><td>acūtō</td><td>acūtā</td><td>acūtō</td><td>acūtīs</td><td>acūtīs</td><td>acūtīs</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-5',
+        title: 'Lekce V: III. Deklinace (substantiva)',
+        content: (
+          <div className="space-y-4">
+            <p>Substantiva 3. deklinace mají v genitivu singuláru koncovku <strong>-is</strong>. Vzory: <em>dolor</em> (m.), <em>caput</em> (n.), <em>pelvis</em> (f.), <em>rēte</em> (n.).</p>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-6',
+        title: 'Lekce VI: Adjektiva III. deklinace',
+        content: (
+          <div className="space-y-4">
+            <p>Adjektiva 3. deklinace dělíme na trojvýchodná (<em>ācer, acris, ācre</em>), dvojvýchodná (<em>brevis, e</em>) a jednovýchodná (<em>simplex</em>).</p>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-7',
+        title: 'Lekce VII: IV. Deklinace',
+        content: (
+          <div className="space-y-4">
+            <p>Substantiva 4. deklinace mají v genitivu sg. koncovku <strong>-ūs</strong>. Vzory: <em>cāsus, ūs, m.</em> a <em>genū, ūs, n.</em></p>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-8',
+        title: 'Lekce VIII: V. Deklinace a přehled',
+        content: (
+          <div className="space-y-4">
+            <p>Substantiva 5. deklinace mají v genitivu sg. koncovku <strong>-ēī / -eī</strong>. Vzor: <em>rēs, reī, f.</em></p>
+          </div>
+        )
+      },
+      {
+        id: 'lekce-9',
+        title: 'Lekce IX: Stupňování adjektiv',
+        content: (
+          <div className="space-y-4">
+            <p><strong>Komparativ (2. stupeň):</strong> Přípona <em>-ior, -ius</em> (skloňování dle 3. deklinace).</p>
+            <p><strong>Superlativ (3. stupeň):</strong> Přípona <em>-issimus, a, um</em> (skloňování dle 1. a 2. deklinace).</p>
           </div>
         )
       }
@@ -210,9 +631,7 @@
         try {
           const savedWords = localStorage.getItem('latinaKnownWords');
           if (savedWords) setKnownWords(JSON.parse(savedWords));
-        } catch (e) {
-          console.error(e);
-        }
+        } catch (e) {}
       }, []);
 
       const updateKnownWords = (word, isKnown) => {
@@ -225,13 +644,21 @@
 
       return (
         <div className="flex h-screen bg-slate-50 font-sans text-slate-800">
+          <style dangerouslySetInnerHTML={{__html: `
+            .perspective-1000 { perspective: 1000px; }
+            .transform-style-3d { transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+            .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+            .rotate-y-180 { transform: rotateY(180deg); }
+          `}} />
+
+          {/* Sidebar */}
           <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-10 shrink-0">
             <div className="p-6 bg-slate-950 flex items-center justify-between border-b border-slate-800">
               <div className="flex items-center gap-3">
-                <Stethoscope className="text-teal-500" />
+                <Stethoscope className="w-8 h-8 text-teal-500" />
                 <div>
                   <h1 className="text-lg font-bold text-white leading-tight">Lékařská Latina</h1>
-                  <span className="text-xs text-slate-400">Učebnice</span>
+                  <span className="text-xs text-amber-400 font-semibold">BETA verze</span>
                 </div>
               </div>
             </div>
@@ -240,80 +667,244 @@
               <button onClick={() => setCurrentSection('dashboard')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'dashboard' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
                 <LayoutDashboard /> <span className="font-medium">Přehled</span>
               </button>
+              <button onClick={() => setCurrentSection('theory')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'theory' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
+                <BookOpen /> <span className="font-medium">Teorie & Tabulky</span>
+              </button>
               <button onClick={() => setCurrentSection('practice')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'practice' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <Dumbbell /> <span className="font-medium">Kartičky & Kvíz</span>
+                <Dumbbell /> <span className="font-medium">Cvičení & Kartičky</span>
               </button>
               <button onClick={() => setCurrentSection('dictionary')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'dictionary' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
-                <ListFilter /> <span className="font-medium">Slovníček</span>
+                <ListFilter /> <span className="font-medium">Slovníček (Vše)</span>
+              </button>
+              <button onClick={() => setCurrentSection('sources')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${currentSection === 'sources' ? 'bg-teal-600 text-white' : 'hover:bg-slate-800'}`}>
+                <Info /> <span className="font-medium">Zdroje & Literatura</span>
               </button>
             </nav>
           </aside>
 
-          <main className="flex-1 overflow-y-auto p-8">
-            {currentSection === 'dashboard' && (
-              <div className="max-w-4xl mx-auto space-y-6">
-                <h2 className="text-3xl font-bold">Vítejte ve studiu lékařské latiny</h2>
-                <div className="bg-white p-6 rounded-xl border shadow-sm">
-                  <h3 className="text-xl font-bold mb-2">Stav naučených slovíček</h3>
-                  <p className="text-4xl font-extrabold text-teal-600 my-2">
-                    {Object.values(knownWords).filter(Boolean).length} / {vocabDatabase.length}
-                  </p>
-                </div>
-              </div>
-            )}
-
+          <main className="flex-1 overflow-y-auto">
+            {currentSection === 'dashboard' && <Dashboard knownWords={knownWords} setSection={setCurrentSection} />}
+            {currentSection === 'theory' && <TheoryView activeChapter={activeTheoryChapter} setChapter={setActiveTheoryChapter} />}
             {currentSection === 'practice' && (
-              <FlashcardsModule vocab={getVocabByCategory(practiceCategory)} knownWords={knownWords} updateKnownWords={updateKnownWords} />
+              <PracticeView mode={practiceMode} setMode={setPracticeMode} category={practiceCategory} setCategory={setPracticeCategory} knownWords={knownWords} updateKnownWords={updateKnownWords} />
             )}
-
-            {currentSection === 'dictionary' && (
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl font-bold mb-4">Slovníček</h2>
-                <div className="bg-white rounded-xl border overflow-hidden">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-100 border-b"><th className="p-4">Latina</th><th className="p-4">Česky</th><th className="p-4">Lekce</th></tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {vocabDatabase.map((v, i) => (
-                        <tr key={i}><td className="p-4 font-semibold">{v.latin}</td><td className="p-4 text-teal-700">{v.czech}</td><td className="p-4 text-sm text-slate-500">{v.cat}</td></tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
+            {currentSection === 'dictionary' && <DictionaryView category={dictCategory} setCategory={setDictCategory} search={dictSearch} setSearch={setDictSearch} />}
+            {currentSection === 'sources' && <SourcesView />}
           </main>
         </div>
       );
     }
 
-    function FlashcardsModule({ vocab, knownWords, updateKnownWords }) {
-      const [idx, setIdx] = useState(0);
-      const [flipped, setFlipped] = useState(false);
-
-      if (!vocab || vocab.length === 0) return <div>Žádná slovíčka.</div>;
-      const w = vocab[idx];
+    // --- DASHBOARD ---
+    function Dashboard({ knownWords, setSection }) {
+      const totalWords = vocabDatabase.length;
+      const learnedWords = Object.values(knownWords).filter(Boolean).length;
+      const progressPercent = Math.round((learnedWords / totalWords) * 100) || 0;
 
       return (
-        <div className="max-w-md mx-auto text-center space-y-6">
-          <div onClick={() => setFlipped(!flipped)} className="bg-white p-12 rounded-2xl border shadow-lg cursor-pointer min-h-[200px] flex flex-col justify-center items-center">
-            <span className="text-xs font-bold text-slate-400 mb-2">{flipped ? 'ČESKÝ PŘEKLAD' : 'LATINSKÝ VÝRAZ'}</span>
-            <h2 className="text-3xl font-extrabold">{flipped ? w.czech : w.latin}</h2>
-            <span className="text-xs text-slate-400 mt-4">Kliknutím otoč</span>
-          </div>
-          <div className="flex gap-4">
-            <button onClick={() => { updateKnownWords(w.latin, false); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-3 bg-rose-100 text-rose-700 font-bold rounded-xl">Neznám</button>
-            <button onClick={() => { updateKnownWords(w.latin, true); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-3 bg-emerald-100 text-emerald-700 font-bold rounded-xl">Znám</button>
+        <div className="p-8 max-w-5xl mx-auto space-y-8">
+          <header>
+            <h2 className="text-3xl font-bold text-slate-900">Vítejte ve studiu lékařské latiny</h2>
+            <p className="text-slate-500 mt-2">Komplexní příprava na test dle skript Fakulty zdravotnických studií.</p>
+          </header>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-br from-teal-900 to-slate-800 text-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+              <div className="flex items-center gap-4 mb-6">
+                <BrainCircuit className="w-10 h-10 text-teal-400" />
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-200">Zvládnutá slovíčka</h3>
+                  <p className="text-3xl font-bold">{learnedWords} / {totalWords}</p>
+                </div>
+              </div>
+              <div className="w-full bg-slate-700 rounded-full h-2.5">
+                <div className="bg-teal-400 h-2.5 rounded-full" style={{ width: `${progressPercent}%` }}></div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
+              <h3 className="text-lg font-bold">Rychlý rozcestník</h3>
+              <button onClick={() => setSection('theory')} className="w-full p-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-left font-medium flex justify-between">Teorie a tabulky <ChevronRight /></button>
+              <button onClick={() => setSection('dictionary')} className="w-full p-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-left font-medium flex justify-between">Kompletní slovníček <ChevronRight /></button>
+              <button onClick={() => setSection('practice')} className="w-full p-3 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-lg text-left font-medium flex justify-between">Kartičky a Kvíz <ChevronRight /></button>
+            </div>
           </div>
         </div>
       );
     }
 
-    // Korektní načtení v Reactu 18
-    const container = document.getElementById('root');
-    const root = ReactDOM.createRoot(container);
-    root.render(<App />);
+    // --- THEORY VIEW ---
+    function TheoryView({ activeChapter, setChapter }) {
+      const activeContent = theoryChapters.find(c => c.id === activeChapter);
+      return (
+        <div className="flex h-full">
+          <div className="w-1/3 max-w-sm border-r bg-white p-4 space-y-1">
+            <h2 className="text-xl font-bold p-2 mb-2">Teorie & Tabulky</h2>
+            {theoryChapters.map(ch => (
+              <button key={ch.id} onClick={() => setChapter(ch.id)} className={`w-full text-left p-3 rounded-lg text-sm ${activeChapter === ch.id ? 'bg-teal-50 text-teal-800 font-bold' : 'hover:bg-slate-50'}`}>
+                {ch.title}
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 p-8 overflow-y-auto">
+            <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl border shadow-sm">
+              <h1 className="text-2xl font-bold mb-6 border-b pb-4">{activeContent?.title}</h1>
+              {activeContent?.content}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- DICTIONARY VIEW ---
+    function DictionaryView({ category, setCategory, search, setSearch }) {
+      const categories = ['Vše', ...new Set(vocabDatabase.map(v => v.cat))];
+      const filtered = vocabDatabase.filter(v => {
+        const matchesCat = category === 'Vše' || v.cat === category;
+        const matchesSearch = v.latin.toLowerCase().includes(search.toLowerCase()) || v.czech.toLowerCase().includes(search.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      return (
+        <div className="p-8 max-w-5xl mx-auto space-y-6">
+          <div className="flex justify-between items-center gap-4">
+            <h2 className="text-3xl font-bold">Slovníček ({filtered.length})</h2>
+            <div className="flex gap-3">
+              <input type="text" placeholder="Hledat..." value={search} onChange={e => setSearch(e.target.value)} className="p-2 border rounded-lg" />
+              <select value={category} onChange={e => setCategory(e.target.value)} className="p-2 border rounded-lg">
+                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl border overflow-hidden shadow-sm">
+            <table className="w-full text-left border-collapse">
+              <thead><tr className="bg-slate-100 border-b"><th className="p-4">Latina</th><th className="p-4">Česky</th><th className="p-4">Lekce</th></tr></thead>
+              <tbody className="divide-y">
+                {filtered.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50"><td className="p-4 font-semibold">{item.latin}</td><td className="p-4 text-teal-700">{item.czech}</td><td className="p-4 text-xs text-slate-500">{item.cat}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // --- SOURCES VIEW ---
+    function SourcesView() {
+      return (
+        <div className="p-8 max-w-3xl mx-auto space-y-6">
+          <h2 className="text-3xl font-bold">Zdroje a Literatura</h2>
+          <div className="bg-white p-8 rounded-xl border space-y-4">
+            <h3 className="font-bold text-lg text-teal-800">Úvod do latinské terminologie</h3>
+            <p><strong>Autorka:</strong> PhDr. Vlasta Seinerová</p>
+            <p><strong>Vydavatel:</strong> Univerzita Pardubice, Fakulta zdravotnických studií</p>
+            <p><strong>ISBN:</strong> 978-80-7560-589-4</p>
+          </div>
+        </div>
+      );
+    }
+
+    // --- PRACTICE VIEW ---
+    function PracticeView({ mode, setMode, category, setCategory, knownWords, updateKnownWords }) {
+      const categories = ['Vše', ...new Set(vocabDatabase.map(v => v.cat))];
+      const activeVocab = getVocabByCategory(category);
+
+      return (
+        <div className="p-8 flex flex-col items-center">
+          <div className="flex justify-between w-full max-w-xl mb-8 bg-white p-2 rounded-xl border">
+            <div className="space-x-2">
+              <button onClick={() => setMode('flashcards')} className={`px-4 py-2 rounded-lg font-medium ${mode === 'flashcards' ? 'bg-teal-600 text-white' : 'bg-slate-100'}`}>Kartičky</button>
+              <button onClick={() => setMode('quiz')} className={`px-4 py-2 rounded-lg font-medium ${mode === 'quiz' ? 'bg-teal-600 text-white' : 'bg-slate-100'}`}>Kvíz</button>
+            </div>
+            <select value={category} onChange={e => setCategory(e.target.value)} className="p-2 border rounded-lg text-sm">
+              {categories.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          {mode === 'flashcards' ? (
+            <FlashcardsModule vocab={activeVocab} knownWords={knownWords} updateKnownWords={updateKnownWords} />
+          ) : (
+            <QuizModule vocab={activeVocab} allVocab={vocabDatabase} />
+          )}
+        </div>
+      );
+    }
+
+    // --- FLASHCARDS MODULE WITH 3D FLIP ---
+    function FlashcardsModule({ vocab, knownWords, updateKnownWords }) {
+      const [idx, setIdx] = useState(0);
+      const [flipped, setFlipped] = useState(false);
+
+      if (!vocab || vocab.length === 0) return <div>Žádná slovíčka v této lekci.</div>;
+      const w = vocab[idx % vocab.length];
+
+      return (
+        <div className="max-w-lg w-full flex flex-col items-center">
+          <div className="w-full flex justify-between text-sm text-slate-400 mb-4">
+            <span>Kartička {idx + 1} z {vocab.length}</span>
+            <span>{knownWords[w.latin] ? '✓ Znám' : 'Neprohlédnuto'}</span>
+          </div>
+
+          <div className="w-full aspect-[3/2] perspective-1000 mb-8 cursor-pointer" onClick={() => setFlipped(!flipped)}>
+            <div className={`relative w-full h-full transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
+              <div className="absolute inset-0 w-full h-full backface-hidden bg-white border-2 rounded-3xl shadow-lg flex flex-col justify-center items-center p-8">
+                <span className="text-xs font-bold text-slate-400 uppercase mb-4">LATINSKY</span>
+                <h2 className="text-3xl font-extrabold text-slate-800 text-center">{w.latin}</h2>
+              </div>
+              <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-teal-900 border-2 rounded-3xl shadow-lg flex flex-col justify-center items-center p-8 text-white">
+                <span className="text-xs font-bold text-teal-300 uppercase mb-4">ČESKY</span>
+                <h2 className="text-3xl font-extrabold text-center">{w.czech}</h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4 w-full">
+            <button onClick={() => { updateKnownWords(w.latin, false); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-4 bg-rose-100 text-rose-700 font-bold rounded-xl hover:bg-rose-200">Neznám</button>
+            <button onClick={() => { updateKnownWords(w.latin, true); setIdx((idx + 1) % vocab.length); setFlipped(false); }} className="flex-1 py-4 bg-emerald-100 text-emerald-700 font-bold rounded-xl hover:bg-emerald-200">Znám</button>
+          </div>
+        </div>
+      );
+    }
+
+    // --- QUIZ MODULE ---
+    function QuizModule({ vocab, allVocab }) {
+      const [started, setStarted] = useState(false);
+      const [questions, setQuestions] = useState([]);
+      const [qIdx, setQIdx] = useState(0);
+      const [score, setScore] = useState(0);
+
+      const startQuiz = () => {
+        const limit = Math.min(10, vocab.length);
+        const shuffled = [...vocab].sort(() => 0.5 - Math.random()).slice(0, limit);
+        const generated = shuffled.map(correct => {
+          const wrong = allVocab.filter(w => w.czech !== correct.czech).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.czech);
+          const options = [correct.czech, ...wrong].sort(() => 0.5 - Math.random());
+          return { question: correct.latin, correctAnswer: correct.czech, options };
+        });
+        setQuestions(generated);
+        setQIdx(0);
+        setScore(0);
+        setStarted(true);
+      };
+
+      if (!started) return <button onClick={startQuiz} className="px-8 py-4 bg-teal-600 text-white font-bold rounded-xl shadow-md">Spustit Kvíz (10 otázek)</button>;
+      if (qIdx >= questions.length) return <div className="text-center"><h2 className="text-3xl font-bold mb-4">Konec kvízu!</h2><p className="text-xl mb-6">Skóre: {score} z {questions.length}</p><button onClick={startQuiz} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl">Hrát znovu</button></div>;
+
+      const q = questions[qIdx];
+      return (
+        <div className="max-w-md w-full text-center space-y-6">
+          <h3 className="text-2xl font-bold">Přeložte: {q.question}</h3>
+          <div className="grid grid-cols-1 gap-3">
+            {q.options.map((opt, i) => (
+              <button key={i} onClick={() => { if(opt === q.correctAnswer) setScore(s=>s+1); setQIdx(qIdx+1); }} className="p-4 bg-white border-2 rounded-xl text-left font-medium hover:border-teal-500">{opt}</button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
