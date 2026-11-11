@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Latinská terminologie - Učebnice</title>
+  <title>PhysioMetrics - Lékařská Latina</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- React a ReactDOM -->
@@ -791,8 +791,8 @@
             <div className="p-6 bg-slate-950 flex items-center gap-3 border-b border-slate-800">
               <Stethoscope className="w-8 h-8 text-teal-500" />
               <div>
-                <h1 className="text-lg font-bold text-white leading-tight">Latina</h1>
-                <span className="text-xs text-amber-400 font-semibold">Latinská terminologie</span>
+                <h1 className="text-lg font-bold text-white leading-tight">PhysioMetrics</h1>
+                <span className="text-xs text-amber-400 font-semibold">Lékařská Latina</span>
               </div>
             </div>
 
@@ -836,7 +836,7 @@
         <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6 md:space-y-8">
           <header className="flex justify-between items-start">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Vítejte v učebnici latinské terminologie</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Vítejte v aplikaci PhysioMetrics</h2>
               <p className="text-slate-500 text-sm md:text-base mt-1">Komplexní příprava z latinské terminologie dle oficiálních skript FZS UPCE</p>
             </div>
           </header>
@@ -1071,7 +1071,7 @@
       );
     }
 
-    // --- FLASHCARDS MODULE BEZPEČNÁ VERZE BEZ KONFLIKTU KLIKNUTÍ ---
+    // --- FLASHCARDS MODULE S OPRAVENOU ZÁVISLOSTÍ USEEFFECT ---
     function FlashcardsModule({ vocab, knownWords, updateKnownWords, onFilterUnknown, resetFilter }) {
       const [idx, setIdx] = useState(0);
       const [flipped, setFlipped] = useState(false);
@@ -1079,13 +1079,16 @@
       const [sessionUnknown, setSessionUnknown] = useState([]);
       const [isFinished, setIsFinished] = useState(false);
 
+      // Vytvořujeme stabilní klíč z názvů slovíček pro useEffect
+      const vocabKey = vocab ? vocab.map(w => w.latin).join('|') : '';
+
       useEffect(() => {
         setIdx(0);
         setFlipped(false);
         setSessionKnown([]);
         setSessionUnknown([]);
         setIsFinished(false);
-      }, [vocab]);
+      }, [vocabKey]);
 
       if (!vocab || vocab.length === 0) return <div className="p-8 text-center text-slate-500">Žádná slovíčka ve vybraných lekcích.</div>;
 
@@ -1102,7 +1105,6 @@
           setSessionKnown(prev => prev.filter(w => w.latin !== currentWord.latin));
         }
 
-        // Vždy nejprve sklopíme kartičku a po krátké prodlevě přepneme index, aby se okamžitě neotočila zpět
         setFlipped(false);
 
         if (idx + 1 < vocab.length) {
