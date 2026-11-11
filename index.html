@@ -761,7 +761,7 @@
           <div className="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center shrink-0 border-b border-slate-800">
             <div className="flex items-center gap-2">
               <Stethoscope className="w-6 h-6 text-teal-500" />
-              <span className="font-bold">Latinská terminologie</span>
+              <span className="font-bold">Lékařská Latina</span>
             </div>
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 bg-slate-800 rounded-lg text-slate-300">
               <ListFilter className="w-6 h-6" />
@@ -992,7 +992,7 @@
       );
     }
 
-    // --- CVIČENÍ / PRACTICE VIEW (S POKROČILÝM VYBÍRÁNÍM LEKCÍ) ---
+    // --- CVIČENÍ / PRACTICE VIEW ---
     function PracticeView({ mode, setMode, category, setCategory, knownWords, updateKnownWords }) {
       const [selectedCats, setSelectedCats] = useState(allCategoriesList);
       const [customVocabFilter, setCustomVocabFilter] = useState(null);
@@ -1071,7 +1071,7 @@
       );
     }
 
-    // --- FLASHCARDS MODULE WITH EVALUATION, GO BACK & PRACTISE UNKNOWN ---
+    // --- FLASHCARDS MODULE S OPRAVENÝM PŘECHODEM KARTIČEK ---
     function FlashcardsModule({ vocab, knownWords, updateKnownWords, onFilterUnknown, resetFilter }) {
       const [idx, setIdx] = useState(0);
       const [flipped, setFlipped] = useState(false);
@@ -1091,7 +1091,8 @@
 
       const currentWord = vocab[idx];
 
-      const handleAnswer = (isKnown) => {
+      const handleAnswer = (e, isKnown) => {
+        if (e) e.stopPropagation(); // Zamezí nechtěnému překlopení kartičky při stisku tlačítka
         updateKnownWords(currentWord.latin, isKnown);
 
         if (isKnown) {
@@ -1102,18 +1103,19 @@
           setSessionKnown(prev => prev.filter(w => w.latin !== currentWord.latin));
         }
 
+        setFlipped(false);
         if (idx + 1 < vocab.length) {
-          setIdx(idx + 1);
-          setFlipped(false);
+          setIdx(prev => prev + 1);
         } else {
           setIsFinished(true);
         }
       };
 
-      const handlePrev = () => {
+      const handlePrev = (e) => {
+        if (e) e.stopPropagation();
         if (idx > 0) {
-          setIdx(idx - 1);
           setFlipped(false);
+          setIdx(prev => prev - 1);
         }
       };
 
@@ -1194,10 +1196,10 @@
           </div>
 
           <div className="flex gap-3 w-full">
-            <button onClick={() => handleAnswer(false)} className="flex-1 py-3.5 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-2xl hover:bg-rose-100 flex justify-center items-center gap-1 text-sm">
+            <button onClick={(e) => handleAnswer(e, false)} className="flex-1 py-3.5 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-2xl hover:bg-rose-100 flex justify-center items-center gap-1 text-sm">
               <XCircle className="w-4 h-4" /> Neznám
             </button>
-            <button onClick={() => handleAnswer(true)} className="flex-1 py-3.5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold rounded-2xl hover:bg-emerald-100 flex justify-center items-center gap-1 text-sm">
+            <button onClick={(e) => handleAnswer(e, true)} className="flex-1 py-3.5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold rounded-2xl hover:bg-emerald-100 flex justify-center items-center gap-1 text-sm">
               <CheckCircle2 className="w-4 h-4" /> Znám
             </button>
           </div>
@@ -1205,7 +1207,7 @@
       );
     }
 
-    // --- QUIZ MODULE (SPRAVĚNÁ ZPĚTNÁ VAZBA & VOLBA POČTU OTÁZEK) ---
+    // --- QUIZ MODULE ---
     function QuizModule({ vocab, allVocab }) {
       const [started, setStarted] = useState(false);
       const [questions, setQuestions] = useState([]);
